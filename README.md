@@ -1,5 +1,4 @@
-# Soen 341
- Soen341 project
+# Soen 341 Project
 
 # Objective:
 Develop a web application to display silly pictures (memes) and allow interaction between users.
