@@ -12,12 +12,12 @@ Many social media platforms exist to give users the ability to share information
 - Users would be able to leave comments and likes on posted pictures.
 
 # Members:
--Michael Lesko-Krleza (40062405) ginywiny
--Greg Tucker (40092432) gregtuc
--Brandon Ma (40027918) DasNoob19
--Logan McMullen (40089767)
--Mostafa El Boustani (40023779)
--Michael Shuhaibar (27210892)  
+- Michael Lesko-Krleza (40062405) ginywiny
+- Greg Tucker (40092432) gregtuc
+- Brandon Ma (40027918) DasNoob19
+- Logan McMullen (40089767)
+- Mostafa El Boustani (40023779)
+- Michael Shuhaibar (27210892)  
 
 # Languages:
 - Javascript
