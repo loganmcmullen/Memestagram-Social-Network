@@ -1,7 +1,7 @@
 # Soen 341 Project
 
 # Objective:
-Develop a web application to display silly pictures (memes) and allow interaction between users.
+Develop a web application to display silly pictures (memes) and allow interaction between users (Memestagram).
 
 # Project Description:
 Many social media platforms exist to give users the ability to share information and interaction between each other. The following web application therefore gives users the ability to share funny pictures, known as memes. With the pictures posted on the application, other users would be able to access the posts, to rate, and to comment.
