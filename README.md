@@ -24,7 +24,8 @@ Many social media platforms exist to give users the ability to share information
 	- Node Js
 - Python 
 	- Flask
-- MongoDB
+- MongoDB / HeidiSQL
+- React/Vue
 
 # Techniques:
 - TBD
