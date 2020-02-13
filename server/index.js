@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const session = require("express-session");
 
 //Mongo Atlas requirements
 const mongoclient = require("mongodb").MongoClient;
@@ -15,6 +16,9 @@ const userModel = require("./user-schema");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(
+  session({ secret: "secretstring", resave: false, saveUninitialized: true })
+);
 
 //Start server
 var database, collection;
@@ -42,39 +46,49 @@ app.post("/signup", (request, response) => {
     if (error) {
       return response.status(500).send(error);
     }
-    response.send(User);
     console.log(`New user created with the following id: ${result.insertedId}`);
+    response.status(200).send();
   });
 });
-//Check if a user exists for sign in
+//Check if a user exists for sign in, and then start a session
 app.post("/login", (request, response) => {
   var username = request.body.username;
   var password = request.body.password;
   collection
-    .findOne({ username })
+    .findOne({ username: username, password: password })
     .then(user => {
-      if (user) {
-        console.log(`Success! User found: ${user.username}`);
-        if (password == user.password) {
-          console.log(`Passwords match!`);
-          response.json({ success: true });
-        } else {
-          console.log(`Invalid Password entered!`);
-          response.json({ success: false });
-        }
+      if (!user) {
+        console.log("Matching Account not found");
+        return response.status(404).send("Matching Account not found");
       } else {
-        console.log("No users found that match.");
-        response.json({ success: false });
+        request.session.user = user;
+        console.log("Matching Account found");
+        return response.status(200).send("Matching Account found");
       }
     })
     .catch(err => console.error(`Failed to find document: ${err}`));
 });
+//Create a dashboard that is only available if a session exists (aka user is signed in)
+app.get("/home", (request, response) => {
+  if (!request.session.user) {
+    return response.status(401).send();
+  } else {
+    return response.status(200).send("User granted access to home");
+  }
+});
+//Sign a user out
+app.get("/logout", (request, response) => {
+  request.session.destroy();
+  return res.status(200).send();
+});
 //Search for users
-app.get("/api/users", (request, response) => {
-  collection.find({}).toArray((error, result) => {
-    if (error) {
-      return response.status(500).send(error);
-    }
-    response.send(result);
-  });
+app.get("/search/:users", (request, response) => {
+  collection
+    .find({ username: request.params.users })
+    .toArray((error, result) => {
+      if (error) {
+        return response.status(500).send(error);
+      }
+      return result;
+    });
 });
