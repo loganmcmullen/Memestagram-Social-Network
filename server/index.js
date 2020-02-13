@@ -9,7 +9,7 @@ const session = require("express-session");
 const mongoclient = require("mongodb").MongoClient;
 const objectid = require("mongodb").ObjectID;
 const uri =
-  "mongodb+srv://greg34910:cookie123@cluster0-pf0b2.mongodb.net/test?retryWrites=true&w=majority";
+  "mongodb+srv://<username>:<password>@cluster0-pf0b2.mongodb.net/test?retryWrites=true&w=majority";
 const userModel = require("./user-schema");
 
 //Middleware and CORS
