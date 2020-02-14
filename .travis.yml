@@ -1,4 +1,4 @@
-language: ruby
+language: node.js
 rvm:
  - 2.2
- - jruby
+ - jnode
