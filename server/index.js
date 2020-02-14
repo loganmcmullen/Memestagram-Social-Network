@@ -39,6 +39,7 @@ app.listen(port, () => {
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 //Create a user for sign up
 app.post("/signup", (request, response) => {
   const User = new userModel(request.body);
@@ -50,6 +51,7 @@ app.post("/signup", (request, response) => {
     response.status(200).send();
   });
 });
+
 //Check if a user exists for sign in, and then start a session
 app.post("/login", (request, response) => {
   var username = request.body.username;
@@ -68,6 +70,7 @@ app.post("/login", (request, response) => {
     })
     .catch(err => console.error(`Failed to find document: ${err}`));
 });
+
 //Create a dashboard that is only available if a session exists (aka user is signed in)
 app.get("/home", (request, response) => {
   if (!request.session.user) {
@@ -76,11 +79,13 @@ app.get("/home", (request, response) => {
     return response.status(200).send("User granted access to home");
   }
 });
+
 //Sign a user out
 app.get("/logout", (request, response) => {
   request.session.destroy();
   return res.status(200).send();
 });
+
 //Search for users
 app.get("/search/:users", (request, response) => {
   collection
