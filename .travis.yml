@@ -1,4 +1,3 @@
 language: node_js
 node_js:
- - 7
- os: osx
+ - 3.5.2
