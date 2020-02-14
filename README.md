@@ -24,12 +24,9 @@ Many social media platforms exist to give users the ability to share information
 - Michael Shuhaibar (27210892) cottonswab
 
 # Languages:
-
-- Javascript - Node Js
-- Python - Flask
-- MongoDB / HeidiSQL
-- React/Vue
+-Javascript
 
 # Techniques:
-
-- TBD
+-React
+-MongoDB Atlas
+-Express
