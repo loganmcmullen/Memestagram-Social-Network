@@ -2,8 +2,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const app = express();
 const session = require("express-session");
+const app = express();
 
 //Mongo Atlas requirements
 const mongoclient = require("mongodb").MongoClient;
@@ -39,7 +39,6 @@ app.listen(port, () => {
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-
 //Create a user for sign up
 app.post("/signup", (request, response) => {
   const User = new userModel(request.body);
@@ -51,7 +50,6 @@ app.post("/signup", (request, response) => {
     response.status(200).send();
   });
 });
-
 //Check if a user exists for sign in, and then start a session
 app.post("/login", (request, response) => {
   var username = request.body.username;
@@ -70,7 +68,6 @@ app.post("/login", (request, response) => {
     })
     .catch(err => console.error(`Failed to find document: ${err}`));
 });
-
 //Create a dashboard that is only available if a session exists (aka user is signed in)
 app.get("/home", (request, response) => {
   if (!request.session.user) {
@@ -79,21 +76,30 @@ app.get("/home", (request, response) => {
     return response.status(200).send("User granted access to home");
   }
 });
-
 //Sign a user out
 app.get("/logout", (request, response) => {
   request.session.destroy();
   return res.status(200).send();
 });
-
 //Search for users
-app.get("/search/:users", (request, response) => {
-  collection
-    .find({ username: request.params.users })
-    .toArray((error, result) => {
-      if (error) {
-        return response.status(500).send(error);
+app.post("/search", (request, response) => {
+  var searchterm = request.body.search;
+  console.dir("Search received, checking database...");
+  collection.find({ username: searchterm }).toArray((error, result) => {
+    if (error) {
+      console.log("Error");
+      return response.status(500).send(error);
+    }
+    if (result !== undefined) {
+      //console.log(result);
+      console.log("Matches found");
+      for (var i = 0; i < result.length; i++) {
+        delete result[i]["email"];
+        delete result[i]["password"];
       }
-      return result;
-    });
+      response.json(result);
+    } else {
+      console.log("No Results Found");
+    }
+  });
 });
