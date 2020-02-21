@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Jumbotron } from "react-bootstrap";
 import axios from "axios";
 import "../App.css";
 
@@ -52,9 +52,11 @@ class RenderSignUpForm extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <h1>Sign Up</h1>
+          <br />
           <Form onSubmit={this.onSubmit}>
             <Form.Group controlId="email">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
