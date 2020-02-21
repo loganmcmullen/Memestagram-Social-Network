@@ -3,6 +3,13 @@ var router = express.Router();
 var client = require("../database/connection");
 var userModel = require("../models/user-schema");
 
+/**
+ * If a request is received, use MongoDB's insertOne
+ * function to create a new user. If an error occurs, false is
+ * returned. Otherwise, return true to the router call.
+ * @param {*} client
+ * @param {*} user
+ */
 async function createUser(client, user) {
   result = await client
     .db("memestagram")
@@ -18,6 +25,8 @@ async function createUser(client, user) {
     });
 }
 
+//Wait for POST request to /register/. Response is returned
+//in JSON format.
 router.post("/", function(req, res, next) {
   try {
     console.log("Received user registration request.");
