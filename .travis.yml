@@ -4,8 +4,10 @@ node_js:
 cache:
   directories:
     - "node_modules"
+pre-install:
+  - npm server
 install:
-  - npm install
+  - npm ci
 script:
   - cd server
   - npm test
