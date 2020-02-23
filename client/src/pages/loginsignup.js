@@ -40,7 +40,7 @@ class AuthenticationForm extends Component {
       form = (
         <div className="Windows-background">
           <RegisterButton onClick={this.handleRegisterClick} />
-          <LoginForm />
+          <LoginForm exact path="/login" />
         </div>
       );
     }
@@ -49,7 +49,7 @@ class AuthenticationForm extends Component {
       form = (
         <div className="Windows-background">
           <LoginButton onClick={this.handleLoginClick} />
-          <SignUpForm />
+          <SignUpForm exact path="/signup" />
         </div>
       );
     }
