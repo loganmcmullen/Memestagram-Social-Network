@@ -26,7 +26,7 @@ app.use("/api/currentuser", currentuser);
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
 
-app.listen(port, () => {
+var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
@@ -34,3 +34,5 @@ app.listen(port, () => {
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+module.exports = server;
