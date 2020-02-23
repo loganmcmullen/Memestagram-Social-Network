@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - node_modules
+
+script:
+  - cd client
+  - npm test
+  - npm run build
+deploy:
+
+  skip_cleanup: true
+  project: ./build/
+on:
+  branch: master
