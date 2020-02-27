@@ -3,15 +3,11 @@ node_js:
   - "stable"
 cache:
   directories:
-    - node_modules
-
+    - "node_modules"
+pre-install:
+  - npm server
+install:
+  - npm ci
 script:
-  - cd client
+  - cd server
   - npm test
-  - npm run build
-deploy:
-
-  skip_cleanup: true
-  project: ./build/
-on:
-  branch: master

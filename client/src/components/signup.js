@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Jumbotron } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import "../App.css";
 
@@ -37,7 +37,7 @@ class RenderSignUpForm extends Component {
     };
     console.log("Submitting User Details.");
     axios
-      .post("http://localhost:8000/signup", user)
+      .post("http://localhost:8000/api/register", user)
       .then(res => {
         console.log(res.data);
       })
