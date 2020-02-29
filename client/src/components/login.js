@@ -1,24 +1,26 @@
 import React, { Component } from "react";
-import { Form, Button, Jumbotron } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import "../App.css";
 
 class RenderLoginForm extends Component {
   constructor(props) {
     super(props);
-
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
+    //By default the state contains an empty username and empty password.
     this.state = {
-      username: "",
+      email: "",
       password: ""
     };
   }
-  onChangeUsername(e) {
-    this.setState({ username: e.target.value });
+  //When this function is called, change the username to the new value.
+  onChangeEmail(e) {
+    this.setState({ email: e.target.value });
   }
+  //When this function is called, change the username to the new value.
   onChangePassword(e) {
     this.setState({ password: e.target.value });
   }
@@ -26,11 +28,11 @@ class RenderLoginForm extends Component {
     e.preventDefault();
 
     const user = {
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     };
     axios
-      .post("http://localhost:8000/login", user)
+      .post("http://localhost:8000/api/login", user)
       .then(res => {
         console.log(res.data);
       })
@@ -38,7 +40,7 @@ class RenderLoginForm extends Component {
         console.log(error);
       });
 
-    this.setState({ username: "", password: "" });
+    this.setState({ email: "", password: "" });
   }
   render() {
     return (
@@ -47,14 +49,14 @@ class RenderLoginForm extends Component {
           <h1>Log in</h1>
           <br />
           <Form onSubmit={this.onSubmit}>
-            <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
+            <Form.Group controlId="Email">
+              <Form.Label>Email</Form.Label>
               <Form.Control
-                type="username"
-                placeholder="Enter username"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
+                type="email"
+                placeholder="Enter email"
+                name="email"
+                value={this.state.email}
+                onChange={this.onChangeEmail}
               />
             </Form.Group>
             <Form.Group controlId="password">

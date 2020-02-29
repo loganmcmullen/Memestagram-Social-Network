@@ -2,28 +2,31 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const session = require("express-session");
 const app = express();
 
 //Loading middleware and CORS
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(
-  session({ secret: "secretstring", resave: false, saveUninitialized: true })
-);
+
+//Initialize database connection
+const connectDatabase = require("./database/connection");
+connectDatabase();
 
 //Loading router modules
 var login = require("./routes/loginUser");
-app.use("/login", login);
+app.use("/api/login", login);
 var register = require("./routes/registerUser");
-app.use("/register", register);
+app.use("/api/register", register);
 var search = require("./routes/searchUser");
-app.use("/search", search);
+app.use("/api/search", search);
+var currentuser = require("./routes/currentUser");
+app.use("/api/currentuser", currentuser);
 
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
-app.listen(port, () => {
+
+var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
@@ -31,3 +34,5 @@ app.listen(port, () => {
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+module.exports = server;
