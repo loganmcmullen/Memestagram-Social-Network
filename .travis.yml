@@ -3,11 +3,8 @@ node_js:
   - "stable"
 cache:
   directories:
-    - "node_modules"
-pre-install:
-  - npm server
-install:
-  - npm ci
+    - node_modules
 script:
   - cd server
+  - npm install
   - npm test
