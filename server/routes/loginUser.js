@@ -1,49 +1,57 @@
+/**
+ * Made with help from the following online tutorial:
+ * https://dev.to/dipakkr/
+ * * implementing-authentication-in-nodejs-with-express-and-jwt-codelab-1-j5i
+ */
+
 var express = require("express");
 var router = express.Router();
-var client = require("../database/connection");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user-schema");
 
-/**
- * This function currently returns true or false, based on whether or not
- * a user with a username/password that matches the database exists. This boolean
- * response is used by the router to send a status 404 (false) or status 200 (true) response.
- * Authentication will need to be added to hash passwords and likely create a cookie session.
- * @param {*} client
- * @param {*} user
- */
-async function loginUser(client, user) {
-  result = await client
-    .db("memestagram")
-    .collection("users")
-    .findOne({ username: user.username, password: user.password })
-    .then(user => {
-      if (!user) {
-        console.log("404: User was not found in database.");
-        return false;
-      } else {
-        console.log("200: User found in database.");
-        return true;
-      }
-    });
-}
+//Begin asynchronous function call when route /api/login/ is called
+router.post("/", async (req, res) => {
+  //Get email and password data from JSON request and put into a constant.
+  const { email, password } = req.body;
 
-//Wait for POST request to /login/. Response is returned
-//in JSON format.
-router.post("/", function(req, res) {
   try {
-    console.log("Received login request");
-    loginUser(client, {
-      username: req.body.username,
-      password: req.body.password
-    }).then(result => {
-      if (result == false) {
-        res.status(404).send();
-      } else {
-        res.status(200).send();
+    //Check if user exists inside database. If user does not exist, return status 404.
+    let user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "User does not exist in database"
+      });
+    }
+
+    //If user exists, use bcrypt to check if hashed password in database matches
+    //the password used to login. If password is invalid, return status 404.
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(400).json({
+        message: "Invalid Password"
+      });
+    }
+
+    //If login details are authenticated, declare "payload" for JWT.
+    //We will use the user ID in the database because it is unique and identifies the user.
+    const payload = {
+      user: {
+        id: user.id
       }
+    };
+    //We will send the JWT back as a response to the login request in the form of "token" : "value".
+    //We also set the expiry time to 1 hour.
+    jwt.sign(payload, "secret", { expiresIn: 3600 }, (err, token) => {
+      if (err) {
+        throw err;
+      }
+      res.status(200).json({ token });
     });
-  } catch (error) {
-    return next(error);
+    //If any error happens, send back status 500.
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server Error" });
   }
 });
-
 module.exports = router;

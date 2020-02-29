@@ -11,10 +11,7 @@ var client = require("../database/connection");
  * @param {*} search
  */
 async function findSearchResults(client, search) {
-  result = await client
-    .db("memestagram")
-    .collection("users")
-    .findOne({ username: search });
+  result = await client.findOne({ username: search });
   if (result) {
     console.log("Found user");
     return result;
