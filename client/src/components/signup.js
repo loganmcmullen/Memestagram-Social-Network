@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
+import auth from "../authentication/auth-login";
 import "../App.css";
 
 class RenderSignUpForm extends Component {
@@ -15,7 +17,8 @@ class RenderSignUpForm extends Component {
     this.state = {
       email: "",
       username: "",
-      password: ""
+      password: "",
+      redirect: false
     };
   }
   onChangeEmail(e) {
@@ -39,7 +42,11 @@ class RenderSignUpForm extends Component {
     axios
       .post("http://localhost:8000/api/register", user)
       .then(res => {
-        console.log(res.data);
+        if (res.status === 200) {
+          auth.authenticate(res.data.token, () => {
+            this.setState({ redirect: true });
+          });
+        }
       })
       .catch(error => {
         console.log(error);
@@ -49,6 +56,10 @@ class RenderSignUpForm extends Component {
   }
 
   render() {
+    const { redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="App">
         <header className="App-header">
