@@ -46,8 +46,8 @@ class RenderProfilePage extends Component{
     render() {
         return (
             <div className="App">
-                <h1> MEMESTAGRAM</h1>
                 <div class="App-header">
+                <h1> MEMESTAGRAM</h1>
                     <img class = "rcorners1" src={require('./maxresdefault.jpg')} alt = "Matthew McConaughey" height="200" width="240"/>
                     <h1> Matthew McConaughey</h1>
                     <Button variant="primary">Upload Picture</Button> 
