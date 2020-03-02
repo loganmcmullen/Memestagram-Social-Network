@@ -34,7 +34,7 @@ describe("GET /api/currentuser", function() {
   });
   it("should return a 401 response if the credentials are invalid", function(done) {
     request(server)
-      .get("/api/currentuser")
+      .post("/api/currentUser")
       .expect(401, done);
   });
   after(function(done) {
