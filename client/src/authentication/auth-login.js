@@ -1,10 +1,12 @@
 import setAuthToken from "./setAuthenticationToken";
+import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 //Constant that contains three functions for authentication.
 const authenticate = {
   authenticate(jsonwebtoken, callback) {
     //Setting the token in sessionStorage
-    sessionStorage.setItem("jwt", JSON.stringify(jsonwebtoken));
+    sessionStorage.setItem("jwt", jsonwebtoken);
     //Attaching token to all axios requests.
     setAuthToken(jsonwebtoken);
     callback();
@@ -23,6 +25,13 @@ const authenticate = {
     setAuthToken();
     callback();
   },
-  setCurrentUser() {}
+  setCurrentUser() {
+    const token = {
+      token: sessionStorage.getItem("jwt")
+    };
+    axios.post("http://localhost:8000/api/currentUser", token).then(res => {
+      return res.data;
+    });
+  }
 };
 export default authenticate;
