@@ -4,6 +4,8 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import AuthenticationForm from "./pages/loginsignup";
 import RenderProfilePage from "./components/profile"
+import App from "./App";
+
 //import LoginForm from "./components/login";
 
 //ReactDOM.render(<LoginForm />, document.getElementById("root"));

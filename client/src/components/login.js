@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
+import auth from "../authentication/auth-login";
 import "../App.css";
 
 class RenderLoginForm extends Component {
@@ -13,7 +15,8 @@ class RenderLoginForm extends Component {
     //By default the state contains an empty username and empty password.
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      redirect: false
     };
   }
   //When this function is called, change the username to the new value.
@@ -34,7 +37,11 @@ class RenderLoginForm extends Component {
     axios
       .post("http://localhost:8000/api/login", user)
       .then(res => {
-        console.log(res.data);
+        if (res.status === 200) {
+          auth.authenticate(res.data.token, () => {
+            this.setState({ redirect: true });
+          });
+        }
       })
       .catch(error => {
         console.log(error);
@@ -43,6 +50,10 @@ class RenderLoginForm extends Component {
     this.setState({ email: "", password: "" });
   }
   render() {
+    const { redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="App">
         <header className="App-header">
