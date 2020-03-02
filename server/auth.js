@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = function(req, res, next) {
   //Get the value of the token from the JSON req (request).
-  const token = req.data;
+  const token = req.header("token");
   //If token is not found (aka returns a value of false), return status 401.
   if (!token) return res.status(401).json({ message: "Auth Error" });
 
@@ -22,6 +22,6 @@ module.exports = function(req, res, next) {
     //If any errors occur, return a status of 500.
   } catch (e) {
     console.error(e);
-    res.status(401).send({ message: "Invalid Token" });
+    res.status(404).send({ message: "Invalid Token" });
   }
 };
