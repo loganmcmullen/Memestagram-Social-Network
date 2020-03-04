@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const morgan = require("morgan");
 const app = express();
 
 //Loading middleware and CORS
@@ -29,6 +30,8 @@ const port = process.env.PORT || 8000;
 var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
+
+app.use(morgan("tiny"));
 
 //Default path
 app.get("/", (req, res) => {
