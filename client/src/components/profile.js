@@ -1,62 +1,56 @@
 import React, { Component } from 'react';
-import {
-    Form,
-    Button,
-    Badge
-} from 'react-bootstrap';
+import * as ReactBootstrap from 'react-bootstrap'
 import axios from "axios";
 import "../App.css";
 import profilepic from "./maxresdefault.jpg"
 
 class RenderProfilePage extends Component{
-    
-    /*
-    constructor(props){
+    constructor(props) {
         super(props);
-        //this will be changed later on
-    
-        this.state = {
-            userName = "",
-            realName = "",
-            bio = ""
+        this.state ={
+            file: null
         };
-        
+        this.onFormSubmit = this.onFormSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
-        onUpload(e){
+    onFormSubmit(e){
         e.preventDefault();
-
-        const user = {
-            userName: this.state.userName,
-            realName: this.state.realName
-            bio: this.state.bio
+        const formData = new FormData();
+        formData.append('myImage',this.state.file);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
         };
-        axios
-            .post("http://localhost:8000/api/login", user)
-            .then(res => {
-            console.log(res.data);
-            })
-            .catch(error => {
-            console.log(error);
-            });
-
-        this.setState({ userName: "", realName: "" , bio = ""});
+        axios.post("http://localhost:8000/uploads",formData,config)
+            .then((response) => {
+                alert("The file is successfully uploaded");
+            }).catch((error) => {
+        });
     }
-*/
+    onChange(e) {
+        this.setState({file:e.target.files[0]});
+    }
 
     render() {
         return (
             <div className="App">
-                <div class="App-header">
-                <h1> MEMESTAGRAM</h1>
-                    <img class = "rcorners1" src={require('./maxresdefault.jpg')} alt = "Matthew McConaughey" height="200" width="240"/>
-                    <h1> Matthew McConaughey</h1>
-                    <Button variant="primary">Upload Picture</Button> 
-                    <Button variant="primary">View Pictures</Button>
+                <h4> MEMESTAGRAM</h4>
+                <div className="App-header">
+                    <div className = "col-md-6 m-auto">
+                        <h4> Matthew McConaughey</h4> 
+                        <img className = "rcorners1" src={require('./maxresdefault.jpg')} alt = "Matthew McConaughey" height="200" width="240"/>
+                        <div className = "custom-file mb-3">
+                            <form onSubmit={this.onFormSubmit}>
+                                <input type="file" name="myImage" onChange= {this.onChange}/>
+                                <button type = "submit">Upload</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </div>         
         );
     }
 }
-
 
 export default RenderProfilePage;

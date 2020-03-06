@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import AuthenticationForm from "./pages/loginsignup";
+import ProfilePage from "./components/profile";
 import App from "./App";
 
 //import LoginForm from "./components/login";
