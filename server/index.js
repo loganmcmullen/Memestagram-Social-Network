@@ -12,7 +12,7 @@ const Grid = require("gridfs-stream")
 const methodOverride = require("method-override")
 const config = require("./database/default");
 const uri = config.ConnectionUrl;
-
+const morgan = require("morgan");
 const app = express();
 
 //Loading middleware and CORS
@@ -72,7 +72,9 @@ var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
-//Default path GET
+app.use(morgan("tiny"));
+
+//Default path
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
