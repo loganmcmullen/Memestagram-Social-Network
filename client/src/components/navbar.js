@@ -11,6 +11,7 @@ class NavBar extends Component {
         <Nav className="mr-auto">
           <Nav.Link href="/">Home</Nav.Link>
           <Nav.Link href="#willeventuallybetheprofile">My Profile</Nav.Link>
+          <Nav.Link href="/following">Following</Nav.Link>
           <Nav.Link href="/loginsignup" onClick={auth.removeAuthentication}>
             Sign Out
           </Nav.Link>

@@ -1,4 +1,3 @@
-
 //Initializing express, middleware, and CORS
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -6,10 +5,10 @@ const cors = require("cors");
 const path = require("path");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
-const multer = require("multer")
-const GridFsStorage = require("multer-gridfs-storage")
-const Grid = require("gridfs-stream")
-const methodOverride = require("method-override")
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+const methodOverride = require("method-override");
 const config = require("./database/default");
 const uri = config.ConnectionUrl;
 const morgan = require("morgan");
@@ -28,10 +27,10 @@ connectDatabase();
 const conn = mongoose.createConnection(uri);
 
 let gfs;
-conn.once('open', () => {
+conn.once("open", () => {
   // init stream
   gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection('uploads');
+  gfs.collection("uploads");
 });
 
 const storage = new GridFsStorage({
@@ -53,7 +52,7 @@ const storage = new GridFsStorage({
   }
 });
 
-const upload = multer({storage});
+const upload = multer({ storage });
 
 //Loading router modules
 var login = require("./routes/loginUser");
@@ -64,6 +63,8 @@ var search = require("./routes/searchUser");
 app.use("/api/search", search);
 var currentuser = require("./routes/currentUser");
 app.use("/api/currentuser", currentuser);
+var following = require("./routes/following");
+app.use("/api/follow", following);
 
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
@@ -81,10 +82,9 @@ app.get("/", (req, res) => {
 
 //path POST /upload
 
-app.post('/uploads', upload.single('myImage' ), (req, res) => {
-  console.log(`File: ${req}`)
-  res.json({file: req.file})
-
+app.post("/uploads", upload.single("myImage"), (req, res) => {
+  console.log(`File: ${req}`);
+  res.json({ file: req.file });
 });
 
 module.exports = server;
