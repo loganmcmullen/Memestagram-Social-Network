@@ -1,5 +1,4 @@
 import setAuthToken from "./setAuthenticationToken";
-import jwtDecode from "jwt-decode";
 import axios from "axios";
 
 //Constant that contains three functions for authentication.
