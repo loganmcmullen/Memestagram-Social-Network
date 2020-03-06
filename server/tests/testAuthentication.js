@@ -36,6 +36,7 @@ describe("GET /api/currentuser", function() {
     request(server)
       .post("/api/currentUser")
       .expect(401, done);
+    done();
   });
   after(function(done) {
     server.close(function() {
