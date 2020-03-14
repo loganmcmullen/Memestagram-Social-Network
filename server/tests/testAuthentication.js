@@ -37,8 +37,7 @@ describe("GET /api/currentuser", function() {
     //authenticatedUser.get("/api/login").expect(200, done);
   });
   it("should return a 401 response if the credentials are invalid", function(done) {
-    chai
-      .request(server)
+    request(server)
       .get("http://localhost:8000/api/currentuser")
       .end(function(err, res) {
         const result = res.statusCode;
