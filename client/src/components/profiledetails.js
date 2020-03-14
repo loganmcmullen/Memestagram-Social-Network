@@ -15,7 +15,7 @@ class AccountDetails extends Component {
   //TODO: Add in more details and the ability to change these details.
   componentDidMount() {
     axios
-      .get("http://localhost:8000/api/currentUser", {
+      .get("http://localhost:8000/api/currentuser", {
         headers: { token: sessionStorage.getItem("jwt") }
       })
       .then(res => {

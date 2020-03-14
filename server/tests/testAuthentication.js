@@ -34,16 +34,16 @@ describe("GET /api/currentuser", function() {
       body.should.include("Token");
     });
     done();
-    //authenticatedUser.get("/api/login").expect(200, done);
   });
   it("should return a 401 response if the credentials are invalid", function(done) {
-    request(server)
-      .get("http://localhost:8000/api/currentuser")
-      .end(function(err, res) {
-        const result = res.statusCode;
-        expect(result).to.equal(200);
-        done();
-      });
+    authenticatedUser.get("http://localhost:8000/api/login", function(
+      err,
+      response,
+      body
+    ) {
+      response.statusCode.should.equal(401);
+    });
+    done();
   });
   after(function(done) {
     server.close(function() {
