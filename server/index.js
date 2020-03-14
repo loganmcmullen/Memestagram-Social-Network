@@ -1,4 +1,4 @@
-//Initializing express, middleware, and CORS
+//Initializing express, middleware, CORS
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -19,20 +19,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(cors());
+app.use(morgan("tiny"));
 
 //Initialize database connection
 const connectDatabase = require("./database/connection");
 connectDatabase();
 
+//Middleware and processing for uploading and requesting user photos
+//from the database.
 const conn = mongoose.createConnection(uri);
-
 let gfs;
 conn.once("open", () => {
   // init stream
   gfs = Grid(conn.db, mongoose.mongo);
   gfs.collection("uploads");
 });
-
 const storage = new GridFsStorage({
   url: uri,
   file: (req, file) => {
@@ -51,7 +52,6 @@ const storage = new GridFsStorage({
     });
   }
 });
-
 const upload = multer({ storage });
 
 //Loading router modules
@@ -69,19 +69,12 @@ app.use("/api/follow", following);
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
 
+//Exportable server which is used for integration testing.
 var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
-app.use(morgan("tiny"));
-
-//Default path
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 //path POST /upload
-
 app.post("/uploads", upload.single("myImage"), (req, res) => {
   console.log(`File: ${req}`);
   res.json({ file: req.file });

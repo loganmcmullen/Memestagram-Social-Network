@@ -23,11 +23,14 @@ class Following extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    //Submission must include JWT for authorization and username to determine user to follow
+    //in the database.
     const search = {
-      token: sessionStorage.getItem("jwt"),
       username: this.state.search
     };
 
+    //Sending axios post request
     axios
       .post("http://localhost:8000/api/follow/new", search, {
         headers: { token: sessionStorage.getItem("jwt") }
@@ -43,18 +46,24 @@ class Following extends Component {
             showFailure: false
           });
         } else {
+          //If not successful, show a failure message.
           this.setState({ showSuccess: false, showFailure: true });
         }
       })
       .catch(error => {
+        //If any error occurres, show a failure message to the user.
         this.setState({ showSuccess: false, showFailure: true });
         console.log(error);
       });
     this.setState({
+      //Resetting the state.
       search: ""
     });
   }
 
+  //This function was made separate and apart of componentDidMount because it needs to be called
+  //not only when the page is initially loaded, but also to re-render the followers after a user follows
+  //someone new.
   renderFollowers() {
     axios
       .get("http://localhost:8000/api/follow/", {
@@ -73,6 +82,7 @@ class Following extends Component {
       });
   }
 
+  //The moment this component mounts, renderFollowers is called to render the followers.
   componentDidMount() {
     this.renderFollowers();
   }
