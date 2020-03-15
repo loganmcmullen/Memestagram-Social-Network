@@ -5,6 +5,10 @@ import "../App.css";
 import profilepic from "./maxresdefault.jpg"
 
 class RenderProfilePage extends Component{
+
+
+    
+    //referenced from https://medium.com/@mahesh_joshi/reactjs-nodejs-upload-image-how-to-upload-image-using-reactjs-and-nodejs-multer-918dc66d304c
     constructor(props) {
         super(props);
         this.state ={

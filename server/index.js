@@ -72,17 +72,108 @@ var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
-//Default path GET
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 //path POST /upload
 
 app.post('/uploads', upload.single('myImage' ), (req, res) => {
   console.log(`File: ${req}`)
-  res.json({file: req.file})
+  //res.json({file: req.file})
+  res.redirect('/');
 
 });
+
+//@route GET /files
+// @desc Display all files in JSON
+
+app.get('/files', (req, res) => {
+  gfs.files.find().toArray((err, files) => {
+    //Check if files exist
+    if(!files || files.length ===0){
+      return res.status(404).json({
+        err: 'No files exist'
+      });
+    }
+
+    // Files exist
+    return res.json(files);
+
+  })
+})
+
+//@route GET /files/:filename
+// @desc Display all files in JSON
+
+app.get('/files/:filename', (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    //Check if file
+    if (!file || file.length ===0){
+      return res.status(404).json({
+        err: 'No file exist'
+      });
+    }
+    // File exists
+    return res.json(file);
+  });
+});
+
+//@route GET /image/:filename
+//@desc Display Image
+
+app.get('/image/:filename', (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    //Check if file
+    if (!file || file.length ===0){
+      return res.status(404).json({
+        err: 'No file exist'
+      });
+    }
+    //Check if image
+
+    if(file.contentType === 'image/jpeg' || 
+    file.contentType === 'img/png' || 
+    file.contentType === 'img/img' || 
+    file.contentType === 'img/jpg' || 
+    file.contentType === 'img/gif' || 
+    file.contentType === 'img/tif') {
+
+      //Read output to browser
+      const readstream = gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+    } else {
+      res.status(404).json({
+        err: 'Not an image'
+      })
+
+    }
+  });
+});
+
+app.get('/', (req, res) => {
+  gfs.files.find().toArray((err, files) => {
+    //Check if files exist
+    if(!files || files.length ===0){
+      res.render('profile', {files: false});
+    } else {
+      files.map(file => {
+        if(
+          file.contentType === 'image/jpeg' || 
+          file.contentType === 'img/png' || 
+          file.contentType === 'img/img' || 
+          file.contentType === 'img/jpg' || 
+          file.contentType === 'img/gif' || 
+          file.contentType === 'img/tif') 
+        {
+          file.isImage = true;
+        } else {
+          file.isImage = false;
+        }
+      });
+    }
+    res.render('profile', {files: files})
+
+    // Files exist
+    return res.json(files);
+
+    });
+  });
 
 module.exports = server;
