@@ -24,7 +24,9 @@ const UserSchema = new mongoose.Schema(
   },
   { collection: "users" }
 );
-module.exports = mongoose.model("user", UserSchema);
+
+const user = mongoose.model("user", UserSchema);
+module.exports = user;
 
 /*
 //This is called before the user stores their information into the database.

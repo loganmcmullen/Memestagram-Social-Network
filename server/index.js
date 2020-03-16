@@ -12,7 +12,11 @@ const methodOverride = require("method-override");
 const config = require("./database/default");
 const uri = config.ConnectionUrl;
 const morgan = require("morgan");
+const mongoose = require('mongoose');
 const app = express();
+var router = express.Router();
+
+const user = require("./models/user-schema");
 
 //Loading middleware and CORS
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -86,5 +90,167 @@ app.post("/uploads", upload.single("myImage"), (req, res) => {
   console.log(`File: ${req}`);
   res.json({ file: req.file });
 });
+
+//Default path
+app.get("/test", (req, res) => {
+  res.send("Test");
+});
+
+
+//-----------------------------------------------------------------------
+//Schemas
+const Schema = mongoose.Schema;
+
+//Blog post schema
+const BlogPostSchema = new Schema({
+  title: String,
+  body: String,
+  date: {
+    type: String,
+    default: Date.now()
+  }
+});
+
+//User upload schema
+// const uploadContentSchema = new Schema ({
+//   username: String,
+// });
+
+// const tempImageStorage = multer.diskStorage({
+//   destination: function(req, res, cb) {
+//     cb(null, 'uploads/')
+//   }
+// });
+
+// const multer = require('multer');
+// const upload = multer({storage: tempImageStorage});
+// router.route('img_data').post(upload.single('file'), function(req, res))
+
+
+
+
+
+//Models
+const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
+//const uploadPost = mongoose.model('user', uploadContentSchema);
+
+// var doc = mongoose.model('user', new Schema(
+//   {username : String})
+// ); 
+
+// Route Test
+app.get('/api', (req, res) => {
+  BlogPost.find({  })
+      .then((data) => {
+          console.log('Data: ', data);
+          res.json(data);
+      })
+      .catch((error) => {
+          console.log('error: ', daerrorta);
+      });
+});
+
+//Route username test
+app.get('/api/users', (req, res) => {
+  user.find({  })
+      .then((user) => {
+          console.log('User information: ', user);
+          res.json(user);
+      })
+      .catch((error) => {
+          console.log('error: ', daerrorta);
+      });
+});
+
+// app.get('api/users', (req, res) => {
+//   uploadPost.find({  })
+//       .then((user) => {
+//           console.log('Username: ', user);
+//           res.json(user);
+//       })
+//       .catch((error) => {
+//           console.log('error: ', daerrorta);
+//       });
+// });
+
+app.get('api/username', function(req, res, next){
+
+}); 
+
+app.get('insert', function(req, res, next){
+
+}); 
+
+app.get('update', function(req, res, next){
+
+}); 
+
+app.get('delete', function(req, res, next){
+
+}); 
+
+
+//---------------------------------How data is moved ---------------------------------------
+// const Schema = mongoose.Schema;
+
+// //Blog post schema
+// const BlogPostSchema = new Schema({
+//   title: String,
+//   body: String,
+//   date: {
+//     type: String,
+//     default: Date.now()
+//   }
+// });
+
+// const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
+
+
+// //Saving data to database TEST
+// const data = {
+//   title: "Test 66",
+//   body: "Description test 66"
+// };
+
+// const newBlogPost = new BlogPost(data);
+// newBlogPost.save( (error) => {
+//   if (error) {
+//     console.log("ERROR: not saved");
+//   }  
+//   else {
+//     console.log("SAVED");
+//   }
+// });
+
+//---------------------------------------------------------------------------------------------
+
+// //Get user data 
+// app.get('/api', (req,res) => {
+//   BlogPost.find({ })
+//     .then((data) => {
+//       Console.log('Data: ', data);
+//     })
+//     .catch((error) => {
+//       Console.log('Error:', daerrorta);
+//     })
+// });
+
+// app.get('/saved', (req, res) => {
+//   console.log('Body: ', req.body); 
+//   res.body({
+//     msg: 'We received your data'
+//   });
+// });
+
+//Instead of putting everything in index.js
+//TODO: Create .js file in routes called /api
+//TODO: const routes = require('./routes/api');
+//TODO: app.use('/api', routes); 
+
+
+
+
+
+
 
 module.exports = server;

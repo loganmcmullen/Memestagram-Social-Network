@@ -16,19 +16,3 @@ const connectDatabase = async () => {
 };
 module.exports = connectDatabase;
 
-
-
-/*
-const connectDatabase = async () => {
-  try {
-    await client.connect();
-    console.log("MongoDB is Connected...");
-    //console.log(client);
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
-  }
-};
-connectDatabase();
-module.exports = client;
-*/
