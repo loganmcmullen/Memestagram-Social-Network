@@ -12,7 +12,6 @@ const methodOverride = require("method-override");
 const config = require("./database/default");
 const uri = config.ConnectionUrl;
 const morgan = require("morgan");
-const mongoose = require('mongoose');
 const app = express();
 var router = express.Router();
 
@@ -23,6 +22,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(cors());
+
+// Validation
+// app.use((req,res,next) => {
+//   res.header('Access-Control-Allow-Origin', '*'),
+//   res.header('Access-Control-Allow-Origin', 'Origin, X-Requested-With, Content-Type, Accept, Autorization');
+//   if (req.method --- 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+//     return res.status(200).json({});
+//   }
+// })
 
 //Initialize database connection
 const connectDatabase = require("./database/connection");
@@ -69,6 +78,8 @@ var currentuser = require("./routes/currentUser");
 app.use("/api/currentuser", currentuser);
 var following = require("./routes/following");
 app.use("/api/follow", following);
+const uploadedImageRoutes = require('./routes/uploadedImage');
+app.use('/api/uploadedImage', uploadedImageRoutes);
 
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
@@ -78,26 +89,19 @@ var server = app.listen(port, () => {
 });
 
 app.use(morgan("tiny"));
+app.use('/uploads', express.static('uploads'));
 
 //Default path
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World Test!");
 });
 
 //path POST /upload
-
 app.post("/uploads", upload.single("myImage"), (req, res) => {
   console.log(`File: ${req}`);
   res.json({ file: req.file });
 });
 
-//Default path
-app.get("/test", (req, res) => {
-  res.send("Test");
-});
-
-
-//-----------------------------------------------------------------------
 //Schemas
 const Schema = mongoose.Schema;
 
@@ -127,12 +131,8 @@ const BlogPostSchema = new Schema({
 // router.route('img_data').post(upload.single('file'), function(req, res))
 
 
-
-
-
 //Models
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
-//const uploadPost = mongoose.model('user', uploadContentSchema);
 
 // var doc = mongoose.model('user', new Schema(
 //   {username : String})
@@ -161,17 +161,6 @@ app.get('/api/users', (req, res) => {
           console.log('error: ', daerrorta);
       });
 });
-
-// app.get('api/users', (req, res) => {
-//   uploadPost.find({  })
-//       .then((user) => {
-//           console.log('Username: ', user);
-//           res.json(user);
-//       })
-//       .catch((error) => {
-//           console.log('error: ', daerrorta);
-//       });
-// });
 
 app.get('api/username', function(req, res, next){
 
@@ -223,34 +212,5 @@ app.get('delete', function(req, res, next){
 // });
 
 //---------------------------------------------------------------------------------------------
-
-// //Get user data 
-// app.get('/api', (req,res) => {
-//   BlogPost.find({ })
-//     .then((data) => {
-//       Console.log('Data: ', data);
-//     })
-//     .catch((error) => {
-//       Console.log('Error:', daerrorta);
-//     })
-// });
-
-// app.get('/saved', (req, res) => {
-//   console.log('Body: ', req.body); 
-//   res.body({
-//     msg: 'We received your data'
-//   });
-// });
-
-//Instead of putting everything in index.js
-//TODO: Create .js file in routes called /api
-//TODO: const routes = require('./routes/api');
-//TODO: app.use('/api', routes); 
-
-
-
-
-
-
 
 module.exports = server;
