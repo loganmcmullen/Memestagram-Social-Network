@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Button, Badge } from "react-bootstrap";
-import "../App.css";
 import LoginForm from "../components/login";
 import SignUpForm from "../components/signup";
 
@@ -38,7 +37,7 @@ class AuthenticationForm extends Component {
     //If current state has isLogin set to true, render the login form.
     if (isLogin) {
       form = (
-        <div className="Windows-background">
+        <div>
           <RegisterButton onClick={this.handleRegisterClick} />
           <LoginForm exact path="/login" />
         </div>
@@ -47,7 +46,7 @@ class AuthenticationForm extends Component {
     //if current state has isRegister set to true, render the register form.
     if (isRegister) {
       form = (
-        <div className="Windows-background">
+        <div>
           <LoginButton onClick={this.handleLoginClick} />
           <SignUpForm exact path="/signup" />
         </div>

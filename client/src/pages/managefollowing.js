@@ -7,6 +7,8 @@ import { Redirect } from "react-router-dom";
 class FollowingPage extends Component {
   state = {};
   render() {
+    //auth.isAuthenticated uses the functions defined on the auth-login page to
+    //determine whether a user is currently logged in.
     if (!auth.isAuthenticated()) {
       return <Redirect to="/loginsignup" />;
     }
