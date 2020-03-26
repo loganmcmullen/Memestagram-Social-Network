@@ -19,6 +19,9 @@ function App() {
           </Route>
           <Route exact path="/following">
             <FollowingPage />
+            </Route>
+          <Route exact path="/profilepage">
+            <ProfilePage />
           </Route>
           <Route exact path="/profile">
             <ProfilePage />
