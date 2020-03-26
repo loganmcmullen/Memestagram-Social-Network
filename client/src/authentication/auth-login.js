@@ -1,5 +1,3 @@
-import setAuthToken from "./setAuthenticationToken";
-import jwtDecode from "jwt-decode";
 import axios from "axios";
 
 //Constant that contains three functions for authentication.
@@ -8,7 +6,6 @@ const authenticate = {
     //Setting the token in sessionStorage
     sessionStorage.setItem("jwt", jsonwebtoken);
     //Attaching token to all axios requests.
-    setAuthToken(jsonwebtoken);
     callback();
   },
   isAuthenticated() {
@@ -22,7 +19,6 @@ const authenticate = {
     //Remove the JWT from sessionStorage (essentially logging a user out).
     sessionStorage.removeItem("jwt");
     //Remove token from axios requests
-    setAuthToken();
     callback();
   },
   setCurrentUser() {

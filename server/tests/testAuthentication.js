@@ -25,17 +25,25 @@ describe("GET /api/currentuser", function() {
   //Status code 200 should have been sent.
 
   it("should return a 200 response if the user can log in", function(done) {
-    authenticatedUser.get("/api/login", function(err, response, body) {
+    authenticatedUser.get("http://localhost:8000/api/login", function(
+      err,
+      response,
+      body
+    ) {
       response.statusCode.should.equal(200);
       body.should.include("Token");
     });
     done();
-    //authenticatedUser.get("/api/login").expect(200, done);
   });
   it("should return a 401 response if the credentials are invalid", function(done) {
-    request(server)
-      .post("/api/currentUser")
-      .expect(401, done);
+    authenticatedUser.get("http://localhost:8000/api/login", function(
+      err,
+      response,
+      body
+    ) {
+      response.statusCode.should.equal(401);
+    });
+    done();
   });
   after(function(done) {
     server.close(function() {

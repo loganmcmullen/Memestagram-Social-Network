@@ -14,19 +14,9 @@ const connectDatabase = async () => {
     process.exit(1);
   }
 };
+
+//Remove message about deprecated mongoose
+mongoose.Promise = global.Promise;
+
 module.exports = connectDatabase;
 
-/*
-const connectDatabase = async () => {
-  try {
-    await client.connect();
-    console.log("MongoDB is Connected...");
-    //console.log(client);
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
-  }
-};
-connectDatabase();
-module.exports = client;
-*/
