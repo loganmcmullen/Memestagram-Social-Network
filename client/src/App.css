@@ -12,10 +12,23 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.Original-background {
+  background-color: #282c34;
+  min-height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  padding: 15px;
+  border-radius: 10px;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  z-index: 2;
+}
 
 .App-header {
-  /*background-color: #282c34;*/
-  background-image: url(./windowsbackground.jpg);
+  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -25,8 +38,12 @@
   color: black;
 }
 
-.Windows-background {
-  background-image: url(./windowsbackground.jpg);
+form {
+  color: white;
+}
+
+p {
+  color: black;
 }
 
 .App-link {
@@ -45,7 +62,7 @@
 h1 {
   color: #111;
   font-family: "Helvetica Neue", sans-serif;
-  font-size: 100px;
+  font-size: calc(10px + 2vmin);
   font-weight: bold;
   text-decoration: underline;
   letter-spacing: -1px;
