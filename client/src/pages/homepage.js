@@ -199,18 +199,18 @@ class HomePage extends Component {
   //     </Container>
 
   async getUploadedPictures() {
-    const res = await Axios
-    .get('http://localhost:8000/api/uploadedImage/authenticated', {
-      headers: { token: sessionStorage.getItem("jwt") }
-    })
-    .then((response) => {
-      const uploadedImage = res.uploadedImage
-      this.setState({uploadedImages: uploadedImage})
-      console.log('Image has been received!');
-    })
-    .catch(() => {
-      alert('Error retrieving image data');
-    })
+    // const res = await Axios
+    // .get('http://localhost:8000/api/uploadedImage/authenticated', {
+    //   headers: { token: sessionStorage.getItem("jwt") }
+    // })
+    // .then((response) => {
+    //   const uploadedImage = res.uploadedImage
+    //   this.setState({uploadedImages: uploadedImage})
+    //   console.log('Image has been received!');
+    // })
+    // .catch(() => {
+    //   alert('Error retrieving image data');
+    // })
 
     // axios
     //   .get("http://localhost:8000/api/uploadedImage/", {
@@ -231,20 +231,33 @@ class HomePage extends Component {
     // <img src="../../../server/uploads/function toISOString() { [native code] }Selection_020" alt=""/>
 
   }
+  // render() {
+  //   if (!auth.isAuthenticated()) {
+  //     return <Redirect to="/loginsignup" />;
+  //   }
+  //   const{img} = this.State;
+
+  //   return (
+  //     <div>
+  //       <Navbar />
+  //       <h2>Welcome to Home Page</h2>
+  //       <img
+  //               src={img}
+  //               alt='Image'/>
+  //     </div>
+  //   )
+  // };
 
   render() {
     if (!auth.isAuthenticated()) {
       return <Redirect to="/loginsignup" />;
     }
-    const{img} = this.State;
 
     return (
       <div>
         <Navbar />
         <h2>Welcome to Home Page</h2>
-        <img
-                src={img}
-                alt='Image'/>
+        <img/>
       </div>
     )
   };
