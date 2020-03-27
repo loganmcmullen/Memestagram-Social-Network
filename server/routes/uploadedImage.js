@@ -201,6 +201,7 @@ router.post('/authenticated', auth, upload.single('uploadedImage'), async (req, 
 
 //Get exact image from input ID
 router.get('/:uploadedImageId', async (req, res, next) => {
+
     const id = req.params.uploadedImageId;
     UploadedImage.findById(id)
     .select('name image _id uploadedImage')
