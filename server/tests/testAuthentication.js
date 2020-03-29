@@ -49,5 +49,6 @@ describe("GET /api/currentuser", function() {
     server.close(function() {
       mongoose.connection.close(done);
     });
+    process.exit(0);
   });
 });
