@@ -1,17 +1,19 @@
-//Initializing express, middleware, CORS
+
+//Initializing express, middleware, and CORS
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
-const Grid = require("gridfs-stream");
-const methodOverride = require("method-override");
+const multer = require("multer")
+const GridFsStorage = require("multer-gridfs-storage")
+const Grid = require("gridfs-stream")
+const methodOverride = require("method-override")
 const config = require("./database/default");
 const uri = config.ConnectionUrl;
-const morgan = require("morgan");
+
 const app = express();
 var router = express.Router();
 
@@ -22,7 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(cors());
-app.use(morgan("tiny"));
 
 /*Validation
 app.use((req,res,next) => {
@@ -34,6 +35,7 @@ app.use((req,res,next) => {
   }
 })*/
 
+
 //Initialize database connection
 const connectDatabase = require("./database/connection");
 connectDatabase();
@@ -42,10 +44,10 @@ connectDatabase();
 //from the database.
 const conn = mongoose.createConnection(uri);
 let gfs;
-conn.once("open", () => {
+conn.once('open', () => {
   // init stream
   gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection("uploads");
+  gfs.collection('uploads');
 });
 const storage = new GridFsStorage({
   url: uri,
@@ -65,7 +67,8 @@ const storage = new GridFsStorage({
     });
   }
 });
-const upload = multer({ storage });
+
+const upload = multer({storage});
 
 //Loading router modules
 var login = require("./routes/loginUser");
@@ -76,10 +79,6 @@ var search = require("./routes/searchUser");
 app.use("/api/search", search);
 var currentuser = require("./routes/currentUser");
 app.use("/api/currentuser", currentuser);
-var following = require("./routes/following");
-app.use("/api/follow", following);
-const uploadedImageRoutes = require('./routes/uploadedImage');
-app.use('/api/uploadedImage', uploadedImageRoutes);
 
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
@@ -89,8 +88,6 @@ var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
-app.use(morgan("tiny"));
-app.use('/uploads', express.static('uploads'));
 
 //Default path
 app.get("/", (req, res) => {
@@ -101,6 +98,25 @@ app.get("/", (req, res) => {
 app.post("/uploads", upload.single("myImage"), (req, res) => {
   console.log(`File: ${req}`);
   res.json({ file: req.file });
+
+
+//path POST /upload
+app.post("/uploads", upload.single("myImage"), (req, res) => {
+  console.log(`File: ${req}`);
+  res.json({ file: req.file });
+});
+
+app.post('/uploads', upload.single('myImage' ), (req, res) => {
+  console.log(`File: ${req}`)
+  res.json({file: req.file})
+  //res.json({file: req.file})
+  res.redirect('/');
+
+});
+
+//------------------MICHAEL MISO'S STUFF----------------------------------
+
+
 });
 
 //Schemas
@@ -116,29 +132,9 @@ const BlogPostSchema = new Schema({
   }
 });
 
-/*User upload schema
-const uploadContentSchema = new Schema ({
-  username: String,
-});
-
-const tempImageStorage = multer.diskStorage({
-  destination: function(req, res, cb) {
-    cb(null, 'uploads/')
-  }
-});
-
-const multer = require('multer');
-const upload = multer({storage: tempImageStorage});
-router.route('img_data').post(upload.single('file'), function(req, res))*/
-
-
 //Models
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
 
-/*var doc = mongoose.model('user', new Schema(
-  {username : String})
-); 
-*/
 
 // Route Test
 app.get('/api', (req, res) => {
@@ -152,67 +148,105 @@ app.get('/api', (req, res) => {
       });
 });
 
-//Route username test
-app.get('/api/users', (req, res) => {
-  user.find({  })
-      .then((user) => {
-          console.log('User information: ', user);
-          res.json(user);
-      })
-      .catch((error) => {
-          console.log('error: ', daerrorta);
+//------------------MICHAEL MISO'S STUFF^^^^^----------------------------------
+
+//@route GET /files/:filename
+// @desc Display all files in JSON
+app.get('/files', (req, res) => {
+  gfs.files.find().toArray((err, files) => {
+    // Check if files
+    if(!files || files.length===0) {
+      return res.status(404).json({
+        err: 'No files exist'
       });
+    }
+
+    //Files exist
+    return res.json(files);
+  })
 });
 
-app.get('api/username', function(req, res, next){
 
-}); 
-
-app.get('insert', function(req, res, next){
-
-}); 
-
-app.get('update', function(req, res, next){
-
-}); 
-
-app.get('delete', function(req, res, next){
-
-}); 
-
-
-/*---------------------------------How data is moved ---------------------------------------
-const Schema = mongoose.Schema;
-
-//Blog post schema
-const BlogPostSchema = new Schema({
-  title: String,
-  body: String,
-  date: {
-    type: String,
-    default: Date.now()
-  }
+app.get('/files/:filename', (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    //Check if file
+    if (!file || file.length ===0){
+      return res.status(404).json({
+        err: 'No file exist'
+      });
+    }
+    // File exists
+    return res.json(file);
+  });
 });
 
-const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
+//@route GET /image/:filename
+//@desc Display Image
 
+app.get('/image/:filename', (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    //Check if file
+    if (!file || file.length ===0){
+      return res.status(404).json({
+        err: 'No file exist'
+      });
+    }
+    //Check if image
 
-//Saving data to database TEST
-const data = {
-  title: "Test 66",
-  body: "Description test 66"
-};
+    if(file.contentType === 'image/jpeg' || 
+    file.contentType === 'image/png' || 
+    file.contentType === 'image/img' || 
+    file.contentType === 'image/jpg' || 
+    file.contentType === 'image/gif' || 
+    file.contentType === 'image/tif') {
 
-const newBlogPost = new BlogPost(data);
-newBlogPost.save( (error) => {
-  if (error) {
-    console.log("ERROR: not saved");
-  }  
-  else {
-    console.log("SAVED");
-  }
+      //Read output to browser
+
+      const readstream = gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+    } else {
+      res.status(404).json({
+        err: 'Not an image'
+      });
+
+    }
+  });
 });
 
----------------------------------------------------------------------------------------------*/
+app.get('/', (req, res) => {
+  gfs.files.find().toArray((err, files) => {
+    //Check if files exist
+    if(!files || files.length ===0){
+      res.render('profile', {files: false});
+    } else {
+      files.map(file => {
+        if(
+          file.contentType === 'image/jpeg' || 
+          file.contentType === 'image/png' || 
+          file.contentType === 'image/img' || 
+          file.contentType === 'image/jpg' || 
+          file.contentType === 'image/gif' || 
+          file.contentType === 'image/tif') 
+        {
+          file.isImage = true;
+        } else {
+          file.isImage = false;
+        }
+      });
+    }
+    res.sendFile({files:files});
+    res.render('profile', {files: files} );
+    });
+  });
+
+app.delete('/files/:id', (req, res) => {
+  gfs.remove({_id: req.params.id, root: 'upload'}, (err, gridStore) => {
+    if(err){
+      return res.status(404).json({ err: err});
+    }
+    res.redirect('/');
+  });
+});
+
 
 module.exports = server;
