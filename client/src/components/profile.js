@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import * as ReactBootstrap from "react-bootstrap";
 import axios from "axios";
 import "../App.css";
 import RenderProfilePictures from './displayPictures';
@@ -46,8 +45,8 @@ class RenderProfilePage extends Component {
                 <h4> MEMESTAGRAM</h4>
                 <div className="App-header">
                 <br></br>
-                <h4> Matthew McConaughey</h4> 
-                <img className = "rcorners1" src={require('./maxresdefault.jpg')} alt = "Matthew McConaughey"/>
+                <h4> The guy John Mayer</h4> 
+                <img className = "rcorners1" src={require('./JohnMayerBattleStudies.jpg')} alt = "Matthew McConaughey"/>
                     <div className = "custom-file mb-3">
                         <span className="label label-warning">Upload a picture</span>
                         <form onSubmit={this.onFormSubmit}>
@@ -56,6 +55,7 @@ class RenderProfilePage extends Component {
                         </form>                           
                     </div>
                     <div className="col-md-6 m-auto">
+                        <br></br>
                         <RenderProfilePictures/>
                     </div>
                 </div>
