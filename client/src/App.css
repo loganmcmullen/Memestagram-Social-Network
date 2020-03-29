@@ -13,6 +13,11 @@
   }
 }
 
+img {
+  width: 20%;
+  height: 25%;
+}
+
 .App-header {
   /*background-color: #282c34;*/
   background-image: url(./windowsbackground.jpg);
