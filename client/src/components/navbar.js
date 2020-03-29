@@ -10,7 +10,7 @@ class NavBar extends Component {
         <Navbar.Brand href="/">Memestagram</Navbar.Brand>
         <Nav className="mr-auto">
           <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="#willeventuallybetheprofile">My Profile</Nav.Link>
+          <Nav.Link href="/profile">My Profile</Nav.Link>
           <Nav.Link href="/following">Following</Nav.Link>
           <Nav.Link href="/loginsignup" onClick={auth.removeAuthentication}>
             Sign Out

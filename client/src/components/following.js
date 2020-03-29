@@ -23,11 +23,14 @@ class Following extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    //Submission must include JWT for authorization and username to determine user to follow
+    //in the database.
     const search = {
-      token: sessionStorage.getItem("jwt"),
       username: this.state.search
     };
 
+    //Sending axios post request
     axios
       .post("http://localhost:8000/api/follow/new", search, {
         headers: { token: sessionStorage.getItem("jwt") }
@@ -43,18 +46,53 @@ class Following extends Component {
             showFailure: false
           });
         } else {
+          //If not successful, show a failure message.
           this.setState({ showSuccess: false, showFailure: true });
         }
       })
       .catch(error => {
+        //If any error occurres, show a failure message to the user.
         this.setState({ showSuccess: false, showFailure: true });
         console.log(error);
       });
     this.setState({
+      //Resetting the state.
       search: ""
     });
-  }
+    }
 
+
+  unfollowUser(username) {
+
+    //Submission must include JWT for authorization and username to determine user to follow
+    //in the database.
+    const search = {
+      username: username
+    };
+
+    //Sending axios post request
+    axios
+      .patch("http://localhost:8000/api/follow/remove", search, {
+        headers: { token: sessionStorage.getItem("jwt") }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          //Re-render the following list to show the submission
+          this.renderFollowers();
+          //Display a success message, indicating to the user that the account was unfollowed.
+        }
+      })
+      .catch(error => {
+        //If any error occurres, show a failure message to the user.
+        this.setState({ showSuccess: false, showFailure: true });
+        console.log(error);
+      });
+    }
+
+
+  //This function was made separate and apart of componentDidMount because it needs to be called
+  //not only when the page is initially loaded, but also to re-render the followers after a user follows
+  //someone new.
   renderFollowers() {
     axios
       .get("http://localhost:8000/api/follow/", {
@@ -73,6 +111,7 @@ class Following extends Component {
       });
   }
 
+  //The moment this component mounts, renderFollowers is called to render the followers.
   componentDidMount() {
     this.renderFollowers();
   }
@@ -114,8 +153,12 @@ class Following extends Component {
             {this.state.following.map(item => {
               return (
                 <ListGroup.Item as="li" key={item}>
-                  {item}
+                      {item}     
+                      <button variant="danger" type="button" onClick={(e) => this.unfollowUser(item, e)}>
+                          Unfollow
+                      </button>
                 </ListGroup.Item>
+                
               );
             })}
           </ListGroup>

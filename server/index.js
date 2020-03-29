@@ -1,4 +1,6 @@
-//Initializing express, middleware, CORS
+
+//Initializing express, middleware, and CORS
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -22,6 +24,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(cors());
+
+/*Validation
+app.use((req,res,next) => {
+  res.header('Access-Control-Allow-Origin', '*'),
+  res.header('Access-Control-Allow-Origin', 'Origin, X-Requested-With, Content-Type, Accept, Autorization');
+  if (req.method --- 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+})*/
 
 
 //Initialize database connection
@@ -55,7 +67,18 @@ const storage = new GridFsStorage({
     });
   }
 });
-const upload = multer({ storage });
+
+const upload = multer({storage});
+
+//Loading router modules
+var login = require("./routes/loginUser");
+app.use("/api/login", login);
+var register = require("./routes/registerUser");
+app.use("/api/register", register);
+var search = require("./routes/searchUser");
+app.use("/api/search", search);
+var currentuser = require("./routes/currentUser");
+app.use("/api/currentuser", currentuser);
 
 //Listen on Port 8000
 const port = process.env.PORT || 8000;
@@ -65,7 +88,16 @@ var server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
 
-app.use('/uploads', express.static('uploads'));
+
+//Default path
+app.get("/", (req, res) => {
+  res.send("Hello World Test!");
+});
+
+//path POST /upload
+app.post("/uploads", upload.single("myImage"), (req, res) => {
+  console.log(`File: ${req}`);
+  res.json({ file: req.file });
 
 
 //path POST /upload
@@ -85,6 +117,8 @@ app.post('/uploads', upload.single('myImage' ), (req, res) => {
 //------------------MICHAEL MISO'S STUFF----------------------------------
 
 
+});
+
 //Schemas
 const Schema = mongoose.Schema;
 
@@ -100,6 +134,7 @@ const BlogPostSchema = new Schema({
 
 //Models
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
+
 
 // Route Test
 app.get('/api', (req, res) => {
