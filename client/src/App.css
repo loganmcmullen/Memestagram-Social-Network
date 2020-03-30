@@ -31,6 +31,10 @@ img {
   width: 20%;
   height: 25%;
 }
+h2 {
+  text-align: center;
+  padding-bottom: 1em;
+}
 
 .App-header {
   background-color: #282c34;
@@ -40,11 +44,11 @@ img {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 form {
-  color: white;
+  color: black;
 }
 
 p {

@@ -2,25 +2,23 @@ import React, { Component } from "react";
 import Navbar from "../components/navbar";
 import auth from "../authentication/auth-login";
 import { Redirect } from "react-router-dom";
-import { Container, Row, Col} from 'react-bootstrap';
+
 import axios from "axios";
-import Axios from "axios";
 
 //const imageData = require('../../../server/models/uploadedImage-schema');
 
 class HomePage extends Component {
-
-  constructor(props) { // super props allows props to be available 
-    super(props)       // inside the constructor
+  constructor(props) {
+    // super props allows props to be available
+    super(props); // inside the constructor
     this.State = {
       //name: '',
       //image: '',
       search: "",
       uploadedImages: [],
-      img: ''
+      img: ""
     };
   }
-
 
   onSubmit(e) {
     e.preventDefault();
@@ -74,13 +72,10 @@ class HomePage extends Component {
   //   userPosts: []
   // }
 
-
-
   // componentDidMount = () => {
   //   this.getBlogPost();
   //   this.getUserInformation();
   // };
-
 
   // getBlogPost = () => {
   //   axios.get('http://localhost:8000/api')
@@ -107,14 +102,14 @@ class HomePage extends Component {
   // }
 
   // displayUserData = (userPosts) => {
-    // if (userPosts.length == 0) {
-    //   return null;
-    // }
-    
+  // if (userPosts.length == 0) {
+  //   return null;
+  // }
+
   //   return userPosts.map((post, index) => (
-  //     <div key = {index}> 
+  //     <div key = {index}>
   //       <h3>
-  //       {post.username} 
+  //       {post.username}
   //       </h3>
   //       <p>
   //         {post.body}
@@ -123,17 +118,15 @@ class HomePage extends Component {
   //   ))
   // };
 
-  displayUploadedImages = (uploadedImages) => {
-    if (uploadedImages.length == 0) {
+  displayUploadedImages = uploadedImages => {
+    if (uploadedImages.length === 0) {
       return null;
     }
     return uploadedImages.map((uploadedImage, index) => (
-      <div key = {index}> 
-        <h3>
-        {uploadedImage.uploadedImage} 
-        </h3>
+      <div key={index}>
+        <h3>{uploadedImage.uploadedImage}</h3>
       </div>
-    ))
+    ));
   };
 
   // displayPicture() {
@@ -144,11 +137,11 @@ class HomePage extends Component {
   // }
 
   arrayBufferToBase64(buffer) {
-    var binary = '';
+    var binary = "";
     var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => binary += String.fromCharCode(b));
+    bytes.forEach(b => (binary += String.fromCharCode(b)));
     return window.btoa(binary);
-};
+  }
 
   async componentDidMount() {
     // fetch('http://localhost:8000/uploads/2020-03-19T16:09:09.461ZSelection_022.png')
@@ -158,18 +151,18 @@ class HomePage extends Component {
     //         var imageStr = this.arrayBufferToBase64(data.img.data.data);
     //         this.setState({img: base64Flag + imageStr});
     //     });
-    this.getUploadedPictures()
+    this.getUploadedPictures();
   }
 
   // displayBlogPost = (posts) => {
   //   if (posts.length == 0) {
   //     return null;
   //   }
-    
+
   //   return posts.map((post, index) => (
-  //     <div key = {index}> 
+  //     <div key = {index}>
   //       <h3>
-  //       {post.title} 
+  //       {post.title}
   //       </h3>
   //       <p>
   //         {post.body}
@@ -211,7 +204,6 @@ class HomePage extends Component {
     // .catch(() => {
     //   alert('Error retrieving image data');
     // })
-
     // axios
     //   .get("http://localhost:8000/api/uploadedImage/", {
     //     //headers: { token: sessionStorage.getItem("jwt") }
@@ -227,9 +219,7 @@ class HomePage extends Component {
     //   .catch(error => {
     //     console.log(error);
     //   });
-
     // <img src="../../../server/uploads/function toISOString() { [native code] }Selection_020" alt=""/>
-
   }
   // render() {
   //   if (!auth.isAuthenticated()) {
@@ -257,12 +247,9 @@ class HomePage extends Component {
       <div>
         <Navbar />
         <h2>Welcome to Home Page</h2>
-        <img/>
       </div>
-    )
-  };
+    );
+  }
 }
 
 export default HomePage;
-
-
