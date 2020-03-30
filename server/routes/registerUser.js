@@ -30,7 +30,8 @@ router.post("/", async (req, res) => {
     //We will use an auto-generated user ID in the database because it is unique and identifies the user.
     const payload = {
       user: {
-        id: user.id
+        id: user.id,
+        username: user.username
       }
     };
 
