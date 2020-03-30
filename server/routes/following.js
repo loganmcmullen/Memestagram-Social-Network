@@ -45,12 +45,18 @@ router.post("/new", auth, async (req, res) => {
 
     //Check if the REQUESTED follow actually exists inside of the database.
     //If the user does not exist, return status 400.
-    let userToFollow = await User.findOne({ username: followUsername });
-    if (!userToFollow) {
-      return res.status(400).json({
-        message: "User does not exist in database"
-      });
-    }
+    await User.findOneAndUpdate(
+      { username: followUsername },
+      {
+        $addToSet: { followers: req.user.username }
+      },
+      { new: true, upsert: true },
+      (err, doc) => {
+        if (err) {
+          return res.status(400).json(err);
+        }
+      }
+    );
 
     //Update the REQUESTING user's account with the new user who they are following using
     //$addToSet (mongoose syntax). If successful, return status 200.
@@ -73,47 +79,57 @@ router.post("/new", auth, async (req, res) => {
 });
 
 //Path to unfollow a new user. *
-router.patch("/remove", auth, async (req, res) => { //*
-    try {
-        //Defining the ID of the user who is REQUESTING to unfollow a new user. *
-        const userId = req.user.id;
+router.patch("/remove", auth, async (req, res) => {
+  try {
+    //Defining the ID of the user who is REQUESTING to unfollow a new user.
+    const userId = req.user.id;
 
-        //If the username of the REQUESTED unfollow does not exist in the HTTP request body, *
-        //return status 404 not found.
-        if (!req.body.username) {
-            return res.status(404).json({ message: "No username received." });
-        }
-
-        //Initialize unfollowUsername with the username of the REQUESTED follow. *
-        const unfollowUsername = req.body.username; //*
-
-        //Check if the REQUESTED unfollow actually exists inside of the users following list. *
-        //If the user does not exist, return status 400.
-        let userToUnfollow = await User.findOne({ following: unfollowUsername }); // *
-        if (!userToUnfollow) { // *
-            return res.status(400).json({
-                message: "User does not exist in database"
-            });
-        }
-
-        //Update the REQUESTING user's account with the new user who they are unfollowing using *
-        //$pull (mongoose syntax). If successful, return status 200. *
-        await User.findByIdAndUpdate(
-            userId,
-            {
-                $pull: { following: unfollowUsername } // *
-            },
-            { new: true, upsert: true },
-            (err, doc) => {
-                if (err) {
-                    return res.status(400).json(err);
-                }
-                return res.status(200).json(doc);
-            }
-        );
-    } catch (error) {
-        return res.status(500).json(error);
+    //If the username of the REQUESTED unfollow does not exist in the HTTP request body,
+    //return status 404 not found.
+    if (!req.body.username) {
+      return res.status(404).json({ message: "No username received." });
     }
+
+    //Initialize unfollowUsername with the username of the REQUESTED follow.
+    const unfollowUsername = req.body.username; //*
+    //Check if the REQUESTED unfollow actually exists inside of the users following list.
+    //If the user exists, add the requesting user to their list of followers.
+    let userToUnfollow = await User.findOneAndUpdate(
+      { username: unfollowUsername },
+      {
+        $pull: { followers: req.user.username }
+      },
+      { new: true, upsert: true },
+      (err, doc) => {
+        if (err) {
+          return res.status(400).json(err);
+        }
+      }
+    );
+    if (!userToUnfollow) {
+      return res.status(400).json({
+        message: "User does not exist in database"
+      });
+    }
+
+    //Update the REQUESTING user's account with the new user who they are unfollowing using
+    //$pull (mongoose syntax). If successful, return status 200.
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: { following: unfollowUsername }
+      },
+      { new: true, upsert: true },
+      (err, doc) => {
+        if (err) {
+          return res.status(400).json(err);
+        }
+        return res.status(200).json(doc);
+      }
+    );
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 });
 
 module.exports = router;
