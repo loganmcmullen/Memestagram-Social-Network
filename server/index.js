@@ -1,5 +1,4 @@
 //Initializing express, middleware, and CORS
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -15,23 +14,14 @@ const uri = config.ConnectionUrl;
 const auth = require("./auth");
 const app = express();
 const User = require("./models/user-schema");
-var router = express.Router();
+var morgan = require("morgan");
 
 //Loading middleware and CORS
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(cors());
-
-/*Validation
-app.use((req,res,next) => {
-  res.header('Access-Control-Allow-Origin', '*'),
-  res.header('Access-Control-Allow-Origin', 'Origin, X-Requested-With, Content-Type, Accept, Autorization');
-  if (req.method --- 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-    return res.status(200).json({});
-  }
-})*/
+app.use(morgan("tiny"));
 
 //Initialize database connection
 const connectDatabase = require("./database/connection");
@@ -76,6 +66,8 @@ var search = require("./routes/searchUser");
 app.use("/api/search", search);
 var currentuser = require("./routes/currentUser");
 app.use("/api/currentuser", currentuser);
+var searchuser = require("./routes/searchUser");
+app.use("/api/searchuser", searchuser);
 var followuser = require("./routes/following");
 app.use("/api/follow", followuser);
 var updatebio = require("./routes/updateBio");
@@ -123,11 +115,39 @@ app.post("/uploads", auth, upload.single("myImage"), async (req, res) => {
 });
 
 // @route GET /files
-// @desc Display all files in JSON
+// @desc Display all files for the CURRENT user in JSON
 app.get("/files", auth, async (req, res) => {
   try {
     //Search for all files stored by the requesting user.
     const user = await User.findById(req.user.id);
+    let objectIdArray = user.posts.photoid.map(s => mongoose.Types.ObjectId(s));
+    gfs.files.find({ _id: { $in: objectIdArray } }).toArray((err, files) => {
+      //Check if file matching those stored in the users document exist. If not, return status 404.
+      if (!files || files.length === 0) {
+        return res.status(404).json({
+          err: "No files exist"
+        });
+      }
+
+      //If file matching those stored in the users document exist, create "description" field and attach the description to the file objects.
+      for (var i = 0; i < files.length; i++) {
+        files[i]["description"] = user.posts.description[i];
+      }
+
+      //Return the files to the server.
+      return res.json(files);
+    });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+
+// @route GET /files
+// @desc Display all files for a REQUESTED user in JSON
+app.post("/searchuser/files", auth, async (req, res) => {
+  try {
+    //Search for all files stored by the requesting user.
+    const user = await User.findOne({ username: req.body.username });
     let objectIdArray = user.posts.photoid.map(s => mongoose.Types.ObjectId(s));
     gfs.files.find({ _id: { $in: objectIdArray } }).toArray((err, files) => {
       //Check if file matching those stored in the users document exist. If not, return status 404.
@@ -228,36 +248,5 @@ app.delete("/files/:id", (req, res) => {
     }
   });
 });
-
-//------------------MICHAEL MISO'S STUFF\----------------------------------
-//Schemas
-const Schema = mongoose.Schema;
-
-//Blog post schema
-const BlogPostSchema = new Schema({
-  title: String,
-  body: String,
-  date: {
-    type: String,
-    default: Date.now()
-  }
-});
-
-//Models
-const BlogPost = mongoose.model("BlogPost", BlogPostSchema);
-
-// Route Test
-app.get("/api", (req, res) => {
-  BlogPost.find({})
-    .then(data => {
-      console.log("Data: ", data);
-      res.json(data);
-    })
-    .catch(error => {
-      console.log("error: ", daerrorta);
-    });
-});
-
-//------------------MICHAEL MISO'S STUFF^^^^^----------------------------------
 
 module.exports = server;

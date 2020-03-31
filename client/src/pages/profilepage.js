@@ -6,7 +6,9 @@ import ProfileDetails from "../components/profiledetails";
 import "../App.css";
 
 class ProfilePage extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <div>
