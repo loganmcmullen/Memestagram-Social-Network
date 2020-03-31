@@ -1,9 +1,31 @@
 import React, { Component } from "react";
 import { Nav, Navbar, Button, Form, FormControl } from "react-bootstrap";
 import auth from "../authentication/auth-login";
+import { withRouter } from "react-router-dom";
 
 class NavBar extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.state = {
+      search: ""
+    };
+  }
+
+  onSubmit(e) {
+    const { history } = this.props;
+    console.log(history);
+    if (history) {
+      history.push(`/search/${this.state.search}`);
+    }
+    this.setState({
+      search: ""
+    });
+  }
+  onChangeSearch(e) {
+    this.setState({ search: e.target.value });
+  }
   render() {
     return (
       <Navbar bg="dark" variant="dark">
@@ -16,12 +38,20 @@ class NavBar extends Component {
             Sign Out
           </Nav.Link>
         </Nav>
-        <Form inline>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-          <Button variant="outline-info">Search</Button>
+        <Form onSubmit={this.onSubmit} inline>
+          <FormControl
+            type="text"
+            value={this.state.search}
+            onChange={this.onChangeSearch}
+            placeholder="Search"
+            className="mr-sm-2"
+          />
+          <Button variant="outline-info" type="submit">
+            Search
+          </Button>
         </Form>
       </Navbar>
     );
   }
 }
-export default NavBar;
+export default withRouter(NavBar);
