@@ -229,35 +229,4 @@ app.delete("/files/:id", (req, res) => {
   });
 });
 
-//------------------MICHAEL MISO'S STUFF\----------------------------------
-//Schemas
-const Schema = mongoose.Schema;
-
-//Blog post schema
-const BlogPostSchema = new Schema({
-  title: String,
-  body: String,
-  date: {
-    type: String,
-    default: Date.now()
-  }
-});
-
-//Models
-const BlogPost = mongoose.model("BlogPost", BlogPostSchema);
-
-// Route Test
-app.get("/api", (req, res) => {
-  BlogPost.find({})
-    .then(data => {
-      console.log("Data: ", data);
-      res.json(data);
-    })
-    .catch(error => {
-      console.log("error: ", daerrorta);
-    });
-});
-
-//------------------MICHAEL MISO'S STUFF^^^^^----------------------------------
-
 module.exports = server;
