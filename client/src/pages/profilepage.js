@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import Navbar from "../components/navbar";
-import auth from "../authentication/auth-login";
-import { Redirect } from "react-router-dom";
+import ShowPictures from "../components/displayPictures";
 import Photoupload from "../components/photoupload";
-import AccountDetails from "../components/profiledetails";
+import ProfileDetails from "../components/profiledetails";
 import "../App.css";
 
 class ProfilePage extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <div>
         <Navbar />
-        <p>ProfilePage</p>
-        <AccountDetails />
+        <ProfileDetails />
         <Photoupload />
+        <ShowPictures />
       </div>
     );
   }

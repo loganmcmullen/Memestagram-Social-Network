@@ -1,37 +1,20 @@
 var express = require("express");
 var router = express.Router();
-var client = require("../database/connection");
-
+const User = require("../models/user-schema");
+const auth = require("../auth");
 /**
  * If a username matching the search query from the user
  * is found in the database, send back a json response
  * of the user that was found. Will eventually need to return
  * a unique profile ID so that users can visit the profile.
- * @param {*} client
- * @param {*} search
  */
-async function findSearchResults(client, search) {
-  result = await client.findOne({ username: search });
-  if (result) {
-    console.log("Found user");
-    return result;
-  } else {
-    console.log("No users found");
-    return null;
-  }
-}
-
-//Wait for POST request to /search/. Response is returned
-//in JSON format.
-
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
-    console.log(`Received search request. Search is: ${req.body.search}`);
-    findSearchResults(client, req.body.search).then(result => {
-      res.json(result.username);
-    });
-  } catch (error) {
-    return next(error);
+    //Find a user by their ID and then return their information in JSON to the client.
+    const user = await User.findOne({ username: req.body.username });
+    res.status(200).json(user);
+  } catch (e) {
+    res.send({ message: "Error in Fetching user" });
   }
 });
 

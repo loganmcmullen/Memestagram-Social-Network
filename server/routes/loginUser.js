@@ -37,7 +37,8 @@ router.post("/", async (req, res) => {
     //We will use the user ID in the database because it is unique and identifies the user.
     const payload = {
       user: {
-        id: user.id
+        id: user.id,
+        username: user.username
       }
     };
     //We will send the JWT back as a response to the login request in the form of "token" : "value".

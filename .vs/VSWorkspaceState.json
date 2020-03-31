@@ -2,10 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\client",
-    "\\client\\public",
     "\\client\\src",
-    "\\client\\src\\components"
+    "\\client\\src\\components",
+    "\\client\\src\\pages",
+    "\\server",
+    "\\server\\routes"
   ],
-  "SelectedNode": "\\server",
+  "SelectedNode": "\\client\\src\\components\\following.js",
   "PreviewInSolutionExplorer": false
 }

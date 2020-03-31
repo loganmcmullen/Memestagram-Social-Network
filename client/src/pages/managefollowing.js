@@ -3,6 +3,7 @@ import Navbar from "../components/navbar";
 import Following from "../components/following";
 import auth from "../authentication/auth-login";
 import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class FollowingPage extends Component {
   state = {};
@@ -21,4 +22,4 @@ class FollowingPage extends Component {
   }
 }
 
-export default FollowingPage;
+export default withRouter(FollowingPage);

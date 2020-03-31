@@ -27,6 +27,15 @@
   z-index: 2;
 }
 
+img {
+  width: 20%;
+  height: 25%;
+}
+h2 {
+  text-align: center;
+  padding-bottom: 1em;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -39,7 +48,7 @@
 }
 
 form {
-  color: white;
+  color: black;
 }
 
 p {
