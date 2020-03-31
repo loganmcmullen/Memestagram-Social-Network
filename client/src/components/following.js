@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../App.css";
 import axios from "axios";
 import { Form, Button, ListGroup, Alert } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
 
 class Following extends Component {
   constructor(props) {
@@ -59,11 +60,9 @@ class Following extends Component {
       //Resetting the state.
       search: ""
     });
-    }
-
+  }
 
   unfollowUser(username) {
-
     //Submission must include JWT for authorization and username to determine user to follow
     //in the database.
     const search = {
@@ -87,8 +86,7 @@ class Following extends Component {
         this.setState({ showSuccess: false, showFailure: true });
         console.log(error);
       });
-    }
-
+  }
 
   //This function was made separate and apart of componentDidMount because it needs to be called
   //not only when the page is initially loaded, but also to re-render the followers after a user follows
@@ -153,12 +151,15 @@ class Following extends Component {
             {this.state.following.map(item => {
               return (
                 <ListGroup.Item as="li" key={item}>
-                      {item}     
-                      <button variant="danger" type="button" onClick={(e) => this.unfollowUser(item, e)}>
-                          Unfollow
-                      </button>
+                  {item}
+                  <button
+                    variant="danger"
+                    type="button"
+                    onClick={e => this.unfollowUser(item, e)}
+                  >
+                    Unfollow
+                  </button>
                 </ListGroup.Item>
-                
               );
             })}
           </ListGroup>
@@ -168,4 +169,4 @@ class Following extends Component {
   }
 }
 
-export default Following;
+export default withRouter(Following);
