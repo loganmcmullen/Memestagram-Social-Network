@@ -65,6 +65,7 @@ class AccountDetails extends Component {
           this.setState({
             bio: res.data.bio
           });
+          this.handleClose();
         }
       })
       .catch(error => {
