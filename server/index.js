@@ -241,8 +241,8 @@ app.get("/", (req, res) => {
   });
 });
 
-app.delete("/files/:id", (req, res) => {
-  gfs.remove({ _id: req.params.id, root: "uploads" }, (err, gridStore) => {
+app.delete("/files/:_id", (req, res) => {
+  gfs.remove({ _id: req.params._id, root: "uploads" }, (err, gridStore) => {
     if (err) {
       return res.status(404).json({ err: err });
     }

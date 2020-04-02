@@ -7,20 +7,24 @@ import {
   Card,
   Button,
   InputGroup,
-  FormControl
+  FormControl,
+  FormFile,
+  Form
 } from "react-bootstrap";
 
-class RenderProfilePictures extends Component {
+class RenderPictures extends Component {
   constructor(props) {
     super(props);
+    this.onDeleteButton = this.onDeleteButton.bind(this);
+
     this.state = {
-      img: []
+      img: [],
     };
   }
 
   componentDidMount() {
     axios
-      .get("http://localhost:8000/files", {
+      .get("http://localhost:8000/files/", {
         headers: { token: sessionStorage.getItem("jwt") }
       })
       .then(res => {
@@ -30,13 +34,28 @@ class RenderProfilePictures extends Component {
         for (var i = 0; i < res.data.length; i++) {
           arr.push({
             image: res.data[i].filename,
-            description: res.data[i].description
+            description: res.data[i].description,
+            photoid: res.data[i]._id
           });
         }
         //Fill this.state.img with the array from the for loop.
         this.setState({
           img: arr
         });
+      });
+  }
+
+  onDeleteButton(photoid) {
+    axios
+      .delete("http://localhost:8000/files/" + photoid, {
+        headers: {token: sessionStorage.getItem("jwt")}
+      })
+      .then(res => {
+        console.log("onFormSubmit");
+        alert("The file was successfully deleted");
+      })
+      .catch(error => {
+        console.log(error);
       });
   }
 
@@ -69,7 +88,10 @@ class RenderProfilePictures extends Component {
                         placeholder="Leave a comment"
                       />
                     </InputGroup>
-                    <Button variant="primary">Post comment</Button>
+                    <Button variant="primary float-left">Post comment</Button>
+                    <Form onSubmit = {() => this.onDeleteButton(item.photoid)}>
+                      <Button type="submit" className = "btn btn-danger btn-xs float-right">Delete</Button>
+                    </Form>
                   </Card.Body>
                 </Card>
               </Col>
@@ -81,4 +103,4 @@ class RenderProfilePictures extends Component {
   }
 }
 
-export default RenderProfilePictures;
+export default RenderPictures;
