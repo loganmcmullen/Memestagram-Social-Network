@@ -6,8 +6,6 @@ import { Container, Row, Col} from 'react-bootstrap';
 import axios from "axios";
 import Axios from "axios";
 
-import axios from "axios";
-
 //const imageData = require('../../../server/models/uploadedImage-schema');
 
 class HomePage extends Component {

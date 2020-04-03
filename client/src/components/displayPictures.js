@@ -7,14 +7,19 @@ import {
   Card,
   Button,
   InputGroup,
-  FormControl
+  FormControl,
+  Form
 } from "react-bootstrap";
 
 class RenderProfilePictures extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      img: []
+      img: [],
+      likes: 0,
+      dislikes: 0,
+      liked: false,
+      disliked: false
     };
   }
 
@@ -30,7 +35,9 @@ class RenderProfilePictures extends Component {
         for (var i = 0; i < res.data.length; i++) {
           arr.push({
             image: res.data[i].filename,
-            description: res.data[i].description
+            description: res.data[i].description,
+            likes: res.data[i].likes,
+            dislikes: res.data[i].dislikes
           });
         }
         //Fill this.state.img with the array from the for loop.
@@ -38,6 +45,38 @@ class RenderProfilePictures extends Component {
           img: arr
         });
       });
+  }
+
+  clickLike = ()  => {
+    if(!this.state.liked){
+      this.setState({
+        likes: this.state.likes + 1,
+        liked: true
+      })
+    } else{
+      this.setState({
+        likes: this.state.likes - 1,
+        liked: false
+      })
+    }
+    const feedback = {likes:this.state.likes}
+    axios.post("http://localhost:8000/files/likes", feedback).then(res => {console.log(res.data.likes)})
+  }
+
+  clickDislike = ()  => {
+    if(!this.state.disliked){
+      this.setState({
+        dislikes: this.state.dislikes + 1,
+        disliked: true
+      })
+    } else{
+      this.setState({
+        dislikes: this.state.dislikes - 1,
+        disliked: false
+      })
+    }
+    const feedback = {likes:this.state.dislikes}
+    axios.post("http://localhost:8000/files/dislikes", feedback).then(res => {console.log(res.data.dislikes)})
   }
 
   render() {
@@ -61,8 +100,11 @@ class RenderProfilePictures extends Component {
                   <Card.Body>
                     <Card.Title>{item.description}</Card.Title>
                     <Card.Text>This will be the comment section</Card.Text>
+                    <Button onClick = {this.clickLike}>Like</Button>
+                    <Card.Text>Like count: {this.state.likes}</Card.Text>
+                    <Button onClick = {this.clickDislike}>Dislike</Button>
+                    <Card.Text>Dislike count: {this.state.dislikes}</Card.Text>
                     <InputGroup size="sm" className="mb-3">
-                      <InputGroup.Prepend></InputGroup.Prepend>
                       <FormControl
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
