@@ -54,6 +54,25 @@ class RenderPictures extends Component {
       });
   }
 
+  onDeleteButton(photoid, index) {
+
+    this.setState({...this.state.img[index], description: ''}); //resetting the description of the image at this index
+
+    axios
+      .delete("http://localhost:8000/files/" + photoid, {
+        headers: {token: sessionStorage.getItem("jwt")}
+      })
+      .then(res => {
+      })
+      .catch(error => {
+        console.log(error);
+      });     
+      setTimeout(()=>{alert("Image Deleted"); window.location.reload(true);}, 2000);
+      //window.location.reload(true);
+
+    }
+  
+
   render() {
     return (
       <Container>
