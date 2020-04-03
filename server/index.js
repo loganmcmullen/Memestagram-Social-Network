@@ -248,6 +248,7 @@ app.delete("/files/:_id", (req, res) => {
       return res.status(404).json({ err: err });
     }
   });
+  res.redirect('/');
 });
 
 module.exports = server;
