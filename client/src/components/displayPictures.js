@@ -9,8 +9,10 @@ import {
   InputGroup,
   FormControl,
   FormFile,
-  Form
+  Form,
+  Modal
 } from "react-bootstrap";
+import "../App.css"
 
 class RenderPictures extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class RenderPictures extends Component {
 
     this.state = {
       img: [],
+      show: false
     };
   }
 
@@ -45,25 +48,30 @@ class RenderPictures extends Component {
       });
   }
 
-  onDeleteButton(photoid) {
+  onDeleteButton(photoid, index) {
+
+    this.setState({...this.state.img[index], description: ''}); //resetting the description of the image at this index
+
     axios
       .delete("http://localhost:8000/files/" + photoid, {
         headers: {token: sessionStorage.getItem("jwt")}
       })
       .then(res => {
-        console.log("onFormSubmit");
-        alert("The file was successfully deleted");
       })
       .catch(error => {
         console.log(error);
-      });
-  }
+      });     
+      setTimeout(()=>{alert("Image Deleted"); window.location.reload(true);}, 2000);
+      //window.location.reload(true);
+
+    }
+  
 
   render() {
     return (
       <Container>
         <Row>
-          {this.state.img.map(item => {
+          {this.state.img.map((item, index) => {
             return (
               <Col>
                 <Card
@@ -79,6 +87,7 @@ class RenderPictures extends Component {
                   />
                   <Card.Body>
                     <Card.Title>{item.description}</Card.Title>
+                    <br></br>
                     <Card.Text>This will be the comment section</Card.Text>
                     <InputGroup size="sm" className="mb-3">
                       <InputGroup.Prepend></InputGroup.Prepend>
@@ -89,8 +98,8 @@ class RenderPictures extends Component {
                       />
                     </InputGroup>
                     <Button variant="primary float-left">Post comment</Button>
-                    <Form onSubmit = {() => this.onDeleteButton(item.photoid)}>
-                      <Button type="submit" className = "btn btn-danger btn-xs float-right">Delete</Button>
+                    <Form>
+                      <Button onClick = {() => {this.onDeleteButton(item.photoid, index)}} className = "btn btn-danger btn-sm float-right">Delete</Button>
                     </Form>
                   </Card.Body>
                 </Card>

@@ -47,6 +47,7 @@ class RenderProfilePage extends Component {
       })
       .then(res => {
         alert("The file was successfully uploaded");
+        console.log("wait");
         window.location.reload(true);
       })
       .catch(error => {
