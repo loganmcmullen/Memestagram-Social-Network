@@ -21,6 +21,10 @@ class RenderPictures extends Component {
 
     this.state = {
       img: [],
+      likes: 0,
+      dislikes: 0,
+      liked: false,
+      disliked: false
       show: false
     };
   }
@@ -39,6 +43,8 @@ class RenderPictures extends Component {
             image: res.data[i].filename,
             description: res.data[i].description,
             photoid: res.data[i]._id
+            likes: res.data[i].likes,
+            dislikes: res.data[i].dislikes
           });
         }
         //Fill this.state.img with the array from the for loop.
@@ -47,25 +53,6 @@ class RenderPictures extends Component {
         });
       });
   }
-
-  onDeleteButton(photoid, index) {
-
-    this.setState({...this.state.img[index], description: ''}); //resetting the description of the image at this index
-
-    axios
-      .delete("http://localhost:8000/files/" + photoid, {
-        headers: {token: sessionStorage.getItem("jwt")}
-      })
-      .then(res => {
-      })
-      .catch(error => {
-        console.log(error);
-      });     
-      setTimeout(()=>{alert("Image Deleted"); window.location.reload(true);}, 2000);
-      //window.location.reload(true);
-
-    }
-  
 
   render() {
     return (
@@ -89,8 +76,11 @@ class RenderPictures extends Component {
                     <Card.Title>{item.description}</Card.Title>
                     <br></br>
                     <Card.Text>This will be the comment section</Card.Text>
+                    <Button onClick = {this.clickLike}>Like</Button>
+                    <Card.Text>Like count: {this.state.likes}</Card.Text>
+                    <Button onClick = {this.clickDislike}>Dislike</Button>
+                    <Card.Text>Dislike count: {this.state.dislikes}</Card.Text>
                     <InputGroup size="sm" className="mb-3">
-                      <InputGroup.Prepend></InputGroup.Prepend>
                       <FormControl
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"

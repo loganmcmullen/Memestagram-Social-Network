@@ -196,6 +196,32 @@ app.get("/files/:filename", (req, res) => {
   });
 });
 
+app.post("/files/likes", (req, res) => {
+  gfs.files.findOneAndUpdate({ filename: req.body.filename }, {$addToSet: { likes: req.body.likes }}, { new: true, upsert: true }, (err, file) => {
+    //Check if file exists
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        err: "No file exist"
+      });
+    }
+    //If files exists, return file to client
+    return res.json(file);
+  });
+});
+
+app.post("/files/dislikes", (req, res) => {
+  gfs.files.findOneAndUpdate({ filename: req.body.filename }, {$addToSet: { dislikes: req.body.dislikes }}, { new: true, upsert: true }, (err, file) => {
+    //Check if file exists
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        err: "No file exist"
+      });
+    }
+    //If files exists, return file to client
+    return res.json(file);
+  });
+});
+
 //@route GET /image/:filename
 //@desc Display Image
 app.get("/image/:filename", (req, res) => {
