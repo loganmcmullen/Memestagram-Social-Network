@@ -10,6 +10,7 @@ import {
     InputGroup,
     FormControl
 } from "react-bootstrap";
+
 class RenderHomepagePictures extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +19,7 @@ class RenderHomepagePictures extends Component {
             name: []
         };
     }
+
     loadImages() {
         //Get all users that current user is following.
         axios
@@ -47,6 +49,7 @@ class RenderHomepagePictures extends Component {
                             let currentarray = [...this.state.img];
                             currentarray.push({
                                 image: res.data[res.data.length - 1].filename,
+                                username: user.username,
                                 description: res.data[res.data.length - 1].description
                             });
                             //Set the state to the new array
@@ -57,9 +60,11 @@ class RenderHomepagePictures extends Component {
                 }
             });
     }
+
     componentDidMount() {
         this.loadImages();
     }
+
     render() {
         return (
             <Container>
@@ -73,6 +78,7 @@ class RenderHomepagePictures extends Component {
                                     bg="light"
                                     border="dark"
                                 >
+                                    <Card.Header>{item.username}</Card.Header>
                                     <Card.Img
                                         variant="top"
                                         src={"http://localhost:8000/image/" + item.image}
