@@ -24,15 +24,15 @@ router.post("/", async (req, res) => {
     user = new User({
       email,
       username,
-      password
+      password,
     });
     //Declare payload for JWT.
     //We will use an auto-generated user ID in the database because it is unique and identifies the user.
     const payload = {
       user: {
         id: user.id,
-        username: user.username
-      }
+        username: user.username,
+      },
     };
 
     //Hash and salt the password making passwords in the database secure.
@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
     await user.save();
 
     //If user save is successful, return JWT to client along with status 200.
-    jwt.sign(payload, "registrationkey", { expiresIn: 10000 }, (err, token) => {
+    jwt.sign(payload, "secret", { expiresIn: 10000 }, (err, token) => {
       if (err) throw err;
       res.status(200).json({ token });
     });

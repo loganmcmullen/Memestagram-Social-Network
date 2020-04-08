@@ -6,7 +6,7 @@ import {
   Col,
   Button,
   Form,
-  Modal
+  Modal,
 } from "react-bootstrap";
 import axios from "axios";
 
@@ -18,7 +18,7 @@ class AccountDetails extends Component {
       email: "",
       following: "",
       followers: "",
-      bio: ""
+      bio: "",
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChangeBio = this.onChangeBio.bind(this);
@@ -27,12 +27,12 @@ class AccountDetails extends Component {
   }
   handleShow(e) {
     this.setState({
-      show: true
+      show: true,
     });
   }
   handleClose(e) {
     this.setState({
-      show: false
+      show: false,
     });
   }
 
@@ -40,16 +40,16 @@ class AccountDetails extends Component {
   componentDidMount() {
     axios
       .get("http://localhost:8000/api/currentuser", {
-        headers: { token: sessionStorage.getItem("jwt") }
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
+      .then((res) => {
         console.log(res);
         this.setState({
           username: res.data.username,
           email: res.data.email,
           following: res.data.following.length,
           followers: res.data.followers.length,
-          bio: res.data.bio
+          bio: res.data.bio,
         });
       });
   }
@@ -58,17 +58,17 @@ class AccountDetails extends Component {
     const newbio = { bio: this.state.bio };
     axios
       .post("http://localhost:8000/api/updatebio", newbio, {
-        headers: { token: sessionStorage.getItem("jwt") }
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           this.setState({
-            bio: res.data.bio
+            bio: res.data.bio,
           });
           this.handleClose();
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -106,7 +106,7 @@ class AccountDetails extends Component {
         </Container>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Post a new meme</Modal.Title>
+            <Modal.Title>Post a new biography</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.onFormSubmit}>

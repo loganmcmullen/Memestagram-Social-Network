@@ -8,11 +8,9 @@ import {
   Button,
   InputGroup,
   FormControl,
-  FormFile,
   Form,
-  Modal
 } from "react-bootstrap";
-import "../App.css"
+import "../App.css";
 
 class RenderPictures extends Component {
   constructor(props) {
@@ -24,17 +22,17 @@ class RenderPictures extends Component {
       likes: 0,
       dislikes: 0,
       liked: false,
-      disliked: false
-      show: false
+      disliked: false,
+      show: false,
     };
   }
 
   componentDidMount() {
     axios
-      .get("http://localhost:8000/files/", {
-        headers: { token: sessionStorage.getItem("jwt") }
+      .get("http://localhost:8000/api/photos/files/", {
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
+      .then((res) => {
         //Fill an array with the files sent back from the server. Each array element will use the filename and description
         //of the current element.
         var arr = [];
@@ -42,67 +40,75 @@ class RenderPictures extends Component {
           arr.push({
             image: res.data[i].filename,
             description: res.data[i].description,
-            photoid: res.data[i]._id
+            photoid: res.data[i]._id,
             likes: res.data[i].likes,
-            dislikes: res.data[i].dislikes
+            dislikes: res.data[i].dislikes,
           });
         }
         //Fill this.state.img with the array from the for loop.
         this.setState({
-          img: arr
+          img: arr,
         });
       });
   }
 
   onDeleteButton(photoid, index) {
-
-    this.setState({...this.state.img[index], description: ''}); //resetting the description of the image at this index
+    this.setState({ ...this.state.img[index], description: "" }); //resetting the description of the image at this index
 
     axios
-      .delete("http://localhost:8000/files/" + photoid, {
-        headers: {token: sessionStorage.getItem("jwt")}
+      .delete("http://localhost:8000/api/photos/files/" + photoid, {
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
-      })
-      .catch(error => {
+      .then((res) => {})
+      .catch((error) => {
         console.log(error);
-      });     
-      setTimeout(()=>{alert("Image Deleted"); window.location.reload(true);}, 2000);
-      //window.location.reload(true);
+      });
+    setTimeout(() => {
+      alert("Image Deleted");
+      window.location.reload(true);
+    }, 2000);
+    //window.location.reload(true);
+  }
 
-    }
-  
-  clickLike = ()  => {
-    if(!this.state.liked){
+  clickLike = () => {
+    if (!this.state.liked) {
       this.setState({
         likes: this.state.likes + 1,
-        liked: true
-      })
-    } else{
+        liked: true,
+      });
+    } else {
       this.setState({
         likes: this.state.likes - 1,
-        liked: false
-      })
+        liked: false,
+      });
     }
-    const feedback = {likes:this.state.likes}
-    axios.post("http://localhost:8000/files/likes", feedback).then(res => {console.log(res.data.likes)})
-  }
+    const feedback = { likes: this.state.likes };
+    axios
+      .post("http://localhost:8000/api/photos/files/likes", feedback)
+      .then((res) => {
+        console.log(res.data.likes);
+      });
+  };
 
-  clickDislike = ()  => {
-    if(!this.state.disliked){
+  clickDislike = () => {
+    if (!this.state.disliked) {
       this.setState({
         dislikes: this.state.dislikes + 1,
-        disliked: true
-      })
-    } else{
+        disliked: true,
+      });
+    } else {
       this.setState({
         dislikes: this.state.dislikes - 1,
-        disliked: false
-      })
+        disliked: false,
+      });
     }
-    const feedback = {likes:this.state.dislikes}
-    axios.post("http://localhost:8000/files/dislikes", feedback).then(res => {console.log(res.data.dislikes)})
-  }
+    const feedback = { likes: this.state.dislikes };
+    axios
+      .post("http://localhost:8000/api/photos/files/dislikes", feedback)
+      .then((res) => {
+        console.log(res.data.dislikes);
+      });
+  };
 
   render() {
     return (
@@ -119,16 +125,17 @@ class RenderPictures extends Component {
                 >
                   <Card.Img
                     variant="top"
-                    src={"http://localhost:8000/image/" + item.image}
+                    src={"http://localhost:8000/api/photos/image/" + item.image}
                     alt="Image could not be loaded"
+                    className="card-img-wrap"
                   />
                   <Card.Body>
                     <Card.Title>{item.description}</Card.Title>
                     <br></br>
-                    <Card.Text>This will be the comment section</Card.Text>
-                    <Button onClick = {this.clickLike}>Like</Button>
+                    <Card.Text>Comment section</Card.Text>
+                    <Button onClick={this.clickLike}>Like</Button>
                     <Card.Text>Like count: {this.state.likes}</Card.Text>
-                    <Button onClick = {this.clickDislike}>Dislike</Button>
+                    <Button onClick={this.clickDislike}>Dislike</Button>
                     <Card.Text>Dislike count: {this.state.dislikes}</Card.Text>
                     <InputGroup size="sm" className="mb-3">
                       <FormControl
@@ -139,7 +146,14 @@ class RenderPictures extends Component {
                     </InputGroup>
                     <Button variant="primary float-left">Post comment</Button>
                     <Form>
-                      <Button onClick = {() => {this.onDeleteButton(item.photoid, index)}} className = "btn btn-danger btn-sm float-right">Delete</Button>
+                      <Button
+                        onClick={() => {
+                          this.onDeleteButton(item.photoid, index);
+                        }}
+                        className="btn btn-danger btn-sm float-right"
+                      >
+                        Delete
+                      </Button>
                     </Form>
                   </Card.Body>
                 </Card>

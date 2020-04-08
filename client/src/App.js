@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Route,
-  Switch,
-  BrowserRouter as Router,
-  withRouter
-} from "react-router-dom";
+import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import LoginSignupPage from "./pages/loginsignup";
 import HomePage from "./pages/homepage";
@@ -19,26 +14,26 @@ function App() {
     <Router history={history}>
       <div>
         <Switch>
-          <Route exact path="/" render={props => <HomePage />}></Route>
+          <Route exact path="/" render={(props) => <HomePage />}></Route>
           <Route
             exact
             path="/loginsignup"
-            render={props => <LoginSignupPage />}
+            render={(props) => <LoginSignupPage />}
           ></Route>
           <Route
             exact
             path="/following"
-            render={props => <FollowingPage />}
+            render={(props) => <FollowingPage />}
           ></Route>
           <Route
             exact
             path="/profile"
-            render={props => <ProfilePage />}
+            render={(props) => <ProfilePage />}
           ></Route>
           <Route
             exact
             path="/search/:username"
-            render={props => <SearchProfilePage />}
+            render={(props) => <SearchProfilePage />}
           ></Route>
         </Switch>
       </div>
