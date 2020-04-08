@@ -21,6 +21,10 @@ class RenderPictures extends Component {
 
     this.state = {
       img: [],
+      likes: 0,
+      dislikes: 0,
+      liked: false,
+      disliked: false
       show: false
     };
   }
@@ -39,6 +43,8 @@ class RenderPictures extends Component {
             image: res.data[i].filename,
             description: res.data[i].description,
             photoid: res.data[i]._id
+            likes: res.data[i].likes,
+            dislikes: res.data[i].dislikes
           });
         }
         //Fill this.state.img with the array from the for loop.
@@ -84,6 +90,37 @@ class RenderPictures extends Component {
     console.log(this.img[number].description);
   }
   
+  clickLike = ()  => {
+    if(!this.state.liked){
+      this.setState({
+        likes: this.state.likes + 1,
+        liked: true
+      })
+    } else{
+      this.setState({
+        likes: this.state.likes - 1,
+        liked: false
+      })
+    }
+    const feedback = {likes:this.state.likes}
+    axios.post("http://localhost:8000/files/likes", feedback).then(res => {console.log(res.data.likes)})
+  }
+
+  clickDislike = ()  => {
+    if(!this.state.disliked){
+      this.setState({
+        dislikes: this.state.dislikes + 1,
+        disliked: true
+      })
+    } else{
+      this.setState({
+        dislikes: this.state.dislikes - 1,
+        disliked: false
+      })
+    }
+    const feedback = {likes:this.state.dislikes}
+    axios.post("http://localhost:8000/files/dislikes", feedback).then(res => {console.log(res.data.dislikes)})
+  }
 
   render() {
     return (
@@ -107,8 +144,11 @@ class RenderPictures extends Component {
                     <Card.Title>{item.description}</Card.Title>
                     <br></br>
                     <Card.Text>This will be the comment section</Card.Text>
+                    <Button onClick = {this.clickLike}>Like</Button>
+                    <Card.Text>Like count: {this.state.likes}</Card.Text>
+                    <Button onClick = {this.clickDislike}>Dislike</Button>
+                    <Card.Text>Dislike count: {this.state.dislikes}</Card.Text>
                     <InputGroup size="sm" className="mb-3">
-                      <InputGroup.Prepend></InputGroup.Prepend>
                       <FormControl
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"

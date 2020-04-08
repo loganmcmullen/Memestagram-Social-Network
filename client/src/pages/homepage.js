@@ -28,8 +28,9 @@ export default HomePage;
 import Navbar from "../components/navbar";
 import auth from "../authentication/auth-login";
 import { Redirect } from "react-router-dom";
-
+import { Container, Row, Col} from 'react-bootstrap';
 import axios from "axios";
+import Axios from "axios";
 
 //const imageData = require('../../../server/models/uploadedImage-schema');
 
@@ -274,8 +275,8 @@ class HomePage extends Component {
         <Navbar />
         <h2>Welcome to Home Page</h2>
       </div>
-    );
-  }
+    )
+  };
 }
 
 export default HomePage;
