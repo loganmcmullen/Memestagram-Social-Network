@@ -56,7 +56,8 @@ class RenderPictures extends Component {
 
   onDeleteButton(photoid, index) {
 
-    this.setState({...this.state.jasper, name: 'someothername'});
+    this.setState({...this.state.img[index], description: ''}); //resetting the description of the image at this index
+
 
     axios
       .delete("http://localhost:8000/files/" + photoid, {
