@@ -50,7 +50,7 @@ class RenderPictures extends Component {
 
   onDeleteButton(photoid, index) {
 
-    this.setState({...this.state.img[index], description: ''}); //resetting the description of the image at this index
+    this.setState({...this.state.jasper, name: 'someothername'});
 
     axios
       .delete("http://localhost:8000/files/" + photoid, {
@@ -65,6 +65,24 @@ class RenderPictures extends Component {
       //window.location.reload(true);
 
     }
+
+
+  handleShow(e) {
+    this.setState({
+      show: true
+    });
+  }
+
+  handleClose(e) {
+    this.setState({
+      show: false
+    });
+  }
+
+  onChangeDescription(desc, number) {
+    console.log(desc);
+    console.log(this.img[number].description);
+  }
   
 
   render() {
@@ -98,6 +116,27 @@ class RenderPictures extends Component {
                       />
                     </InputGroup>
                     <Button variant="primary float-left">Post comment</Button>
+                    <Button onClick={()=> this.handleShow()} className = "btn btn-primary float-right tinyButtons">Update Desciption</Button>
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Update Description</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Form>
+                          <Form.Group controlId="description">
+                            <Form.Control
+                              type="description"
+                              placeholder="Enter description"
+                              name="description"
+                              value={this.state.description}
+                            />
+                          </Form.Group>
+                          <Button onClick={()=> {this.onChangeDescription(this.state.description, index)}} variant="dark" type="submit">
+                            Update
+                          </Button>
+                        </Form>
+                      </Modal.Body>
+                    </Modal>
                     <Form>
                       <Button onClick = {() => {this.onDeleteButton(item.photoid, index)}} className = "btn btn-danger btn-sm float-right">Delete</Button>
                     </Form>
