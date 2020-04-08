@@ -72,6 +72,37 @@ class RenderPictures extends Component {
 
     }
   
+  clickLike = ()  => {
+    if(!this.state.liked){
+      this.setState({
+        likes: this.state.likes + 1,
+        liked: true
+      })
+    } else{
+      this.setState({
+        likes: this.state.likes - 1,
+        liked: false
+      })
+    }
+    const feedback = {likes:this.state.likes}
+    axios.post("http://localhost:8000/files/likes", feedback).then(res => {console.log(res.data.likes)})
+  }
+
+  clickDislike = ()  => {
+    if(!this.state.disliked){
+      this.setState({
+        dislikes: this.state.dislikes + 1,
+        disliked: true
+      })
+    } else{
+      this.setState({
+        dislikes: this.state.dislikes - 1,
+        disliked: false
+      })
+    }
+    const feedback = {likes:this.state.dislikes}
+    axios.post("http://localhost:8000/files/dislikes", feedback).then(res => {console.log(res.data.dislikes)})
+  }
 
   render() {
     return (
