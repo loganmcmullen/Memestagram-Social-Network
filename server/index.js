@@ -16,8 +16,6 @@ const app = express();
 const User = require("./models/user-schema");
 var morgan = require("morgan");
 
-const user = require("./models/user-schema");
-
 //Loading middleware and CORS
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
