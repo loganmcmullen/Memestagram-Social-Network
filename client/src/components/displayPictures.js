@@ -24,7 +24,7 @@ class RenderPictures extends Component {
       likes: 0,
       dislikes: 0,
       liked: false,
-      disliked: false
+      disliked: false,
       show: false
     };
   }
@@ -42,7 +42,7 @@ class RenderPictures extends Component {
           arr.push({
             image: res.data[i].filename,
             description: res.data[i].description,
-            photoid: res.data[i]._id
+            photoid: res.data[i]._id,
             likes: res.data[i].likes,
             dislikes: res.data[i].dislikes
           });
@@ -156,7 +156,7 @@ class RenderPictures extends Component {
                       />
                     </InputGroup>
                     <Button variant="primary float-left">Post comment</Button>
-                    <Button onClick={()=> this.handleShow()} className = "btn btn-primary float-right tinyButtons">Update Desciption</Button>
+                    <Button onClick={()=> this.handleShow()} className = "btn btn-secondary float-right btn-sm float-right">Update Desciption</Button>
                     <Modal show={this.state.show} onHide={this.handleClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Update Description</Modal.Title>
@@ -178,7 +178,7 @@ class RenderPictures extends Component {
                       </Modal.Body>
                     </Modal>
                     <Form>
-                      <Button onClick = {() => {this.onDeleteButton(item.photoid, index)}} className = "btn btn-danger btn-sm float-right">Delete</Button>
+                      <Button onClick = {() => {this.onDeleteButton(item.photoid, index)}} className = "btn btn-danger btn-sm float-left">Delete</Button>
                     </Form>
                   </Card.Body>
                 </Card>
