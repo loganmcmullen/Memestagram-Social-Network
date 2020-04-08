@@ -24,7 +24,7 @@ class RenderPictures extends Component {
       likes: 0,
       dislikes: 0,
       liked: false,
-      disliked: false
+      disliked: false,
       show: false
     };
   }
