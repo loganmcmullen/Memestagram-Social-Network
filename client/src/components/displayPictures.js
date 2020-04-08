@@ -23,7 +23,7 @@ class RenderPictures extends Component {
       dislikes: 0,
       liked: false,
       disliked: false,
-      show: false,
+      show: false
     };
   }
 
@@ -55,6 +55,7 @@ class RenderPictures extends Component {
   onDeleteButton(photoid, index) {
     this.setState({ ...this.state.img[index], description: "" }); //resetting the description of the image at this index
 
+
     axios
       .delete("http://localhost:8000/api/photos/files/" + photoid, {
         headers: { token: sessionStorage.getItem("jwt") },
@@ -69,9 +70,25 @@ class RenderPictures extends Component {
     }, 2000);
     //window.location.reload(true);
   }
+  handleShow(e) {
+    this.setState({
+      show: true
+    });
+  }
 
-  clickLike = () => {
-    if (!this.state.liked) {
+  handleClose(e) {
+    this.setState({
+      show: false
+    });
+  }
+
+  onChangeDescription(desc, number) {
+    console.log(desc);
+    console.log(this.img[number].description);
+  }
+  
+  clickLike = ()  => {
+    if(!this.state.liked){
       this.setState({
         likes: this.state.likes + 1,
         liked: true,
@@ -145,6 +162,27 @@ class RenderPictures extends Component {
                       />
                     </InputGroup>
                     <Button variant="primary float-left">Post comment</Button>
+                    <Button onClick={()=> this.handleShow()} className = "btn btn-secondary float-right btn-sm float-right">Update Desciption</Button>
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Update Description</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Form>
+                          <Form.Group controlId="description">
+                            <Form.Control
+                              type="description"
+                              placeholder="Enter description"
+                              name="description"
+                              value={this.state.description}
+                            />
+                          </Form.Group>
+                          <Button onClick={()=> {this.onChangeDescription(this.state.description, index)}} variant="dark" type="submit">
+                            Update
+                          </Button>
+                        </Form>
+                      </Modal.Body>
+                    </Modal>
                     <Form>
                       <Button
                         onClick={() => {
