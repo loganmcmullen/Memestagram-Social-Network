@@ -3,14 +3,13 @@ import axios from "axios";
 import "../App.css";
 import { Button, Modal, Form } from "react-bootstrap";
 
-
 class RenderProfilePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       file: null,
       description: null,
-      show: false
+      show: false,
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -21,36 +20,36 @@ class RenderProfilePage extends Component {
 
   handleShow(e) {
     this.setState({
-      show: true
+      show: true,
     });
   }
 
   handleClose(e) {
     this.setState({
-      show: false
+      show: false,
     });
   }
 
   onFormSubmit(e) {
     e.preventDefault();
     const formData = new FormData();
-    
+
     formData.append("myImage", this.state.file);
     formData.append("myDescription", this.state.description);
 
     axios
-      .post("http://localhost:8000/uploads", formData, {
+      .post("http://localhost:8000/api/photos/uploads", formData, {
         headers: {
           "content-type": "multipart/form-data",
-          token: sessionStorage.getItem("jwt")
-        }
+          token: sessionStorage.getItem("jwt"),
+        },
       })
-      .then(res => {
+      .then((res) => {
         alert("The file was successfully uploaded");
         console.log("wait");
         window.location.reload(true);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }

@@ -1,6 +1,5 @@
 const config = require("./default");
 const uri = config.ConnectionUrl;
-const { MongoClient } = require("mongodb");
 const mongoose = require("mongoose");
 //const client = new MongoClient(uri, { useNewUrlParser: true });
 
@@ -17,6 +16,4 @@ const connectDatabase = async () => {
 
 //Remove message about deprecated mongoose
 mongoose.Promise = global.Promise;
-
 module.exports = connectDatabase;
-

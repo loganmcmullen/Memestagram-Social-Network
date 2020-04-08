@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import "../App.css";
 import axios from "axios";
-import { Form, Button, ListGroup, Alert } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  ListGroup,
+  Alert,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 
 class Following extends Component {
@@ -9,13 +17,21 @@ class Following extends Component {
     super(props);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.visitProfile = this.visitProfile.bind(this);
 
     this.state = {
       search: "",
       following: [],
       showSuccess: false,
-      showFailure: false
+      showFailure: false,
     };
+  }
+
+  visitProfile(username) {
+    const { history } = this.props;
+    if (history) {
+      history.push(`/search/${username}`);
+    }
   }
 
   onChangeSearch(e) {
@@ -28,15 +44,15 @@ class Following extends Component {
     //Submission must include JWT for authorization and username to determine user to follow
     //in the database.
     const search = {
-      username: this.state.search
+      username: this.state.search,
     };
 
     //Sending axios post request
     axios
       .post("http://localhost:8000/api/follow/new", search, {
-        headers: { token: sessionStorage.getItem("jwt") }
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           //Re-render the following list to show the addition
           this.renderFollowers();
@@ -44,21 +60,21 @@ class Following extends Component {
           this.setState({
             following: res.data.following,
             showSuccess: true,
-            showFailure: false
+            showFailure: false,
           });
         } else {
           //If not successful, show a failure message.
           this.setState({ showSuccess: false, showFailure: true });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         //If any error occurres, show a failure message to the user.
         this.setState({ showSuccess: false, showFailure: true });
         console.log(error);
       });
     this.setState({
       //Resetting the state.
-      search: ""
+      search: "",
     });
   }
 
@@ -66,22 +82,22 @@ class Following extends Component {
     //Submission must include JWT for authorization and username to determine user to follow
     //in the database.
     const search = {
-      username: username
+      username: username,
     };
 
     //Sending axios post request
     axios
       .patch("http://localhost:8000/api/follow/remove", search, {
-        headers: { token: sessionStorage.getItem("jwt") }
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           //Re-render the following list to show the submission
           this.renderFollowers();
           //Display a success message, indicating to the user that the account was unfollowed.
         }
       })
-      .catch(error => {
+      .catch((error) => {
         //If any error occurres, show a failure message to the user.
         this.setState({ showSuccess: false, showFailure: true });
         console.log(error);
@@ -94,17 +110,17 @@ class Following extends Component {
   renderFollowers() {
     axios
       .get("http://localhost:8000/api/follow/", {
-        headers: { token: sessionStorage.getItem("jwt") }
+        headers: { token: sessionStorage.getItem("jwt") },
       })
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           console.log("Success");
           this.setState({
-            following: res.data.following
+            following: res.data.following,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -120,7 +136,9 @@ class Following extends Component {
         <div className="App-header">
           <Form onSubmit={this.onSubmit}>
             <Form.Group>
-              <Form.Label>Follow new User: </Form.Label>
+              <Form.Label style={{ color: "white" }}>
+                Follow a new User
+              </Form.Label>
               <Form.Control
                 type="search"
                 placeholder="Enter the username"
@@ -146,19 +164,30 @@ class Following extends Component {
           >
             <Alert variant="danger">User could not be followed.</Alert>
           </div>
-          <p>Already following:</p>
+          <p style={{ color: "white" }}>Already following:</p>
           <ListGroup as="ul">
-            {this.state.following.map(item => {
+            {this.state.following.map((item) => {
               return (
                 <ListGroup.Item as="li" key={item}>
-                  {item}
-                  <button
-                    variant="danger"
-                    type="button"
-                    onClick={e => this.unfollowUser(item, e)}
-                  >
-                    Unfollow
-                  </button>
+                  <Container>
+                    <Row>
+                      <Col
+                        className="ProfileCol"
+                        onClick={(e) => this.visitProfile(item, e)}
+                      >
+                        {item}
+                      </Col>
+                      <Col>
+                        <Button
+                          variant="danger"
+                          type="button"
+                          onClick={(e) => this.unfollowUser(item, e)}
+                        >
+                          Unfollow
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Container>
                 </ListGroup.Item>
               );
             })}

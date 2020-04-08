@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import Navbar from "../components/navbar";
-import ShowPictures from "../components/displayPictures";
+import ShowPictures from "../components/displaypictures";
 import Photoupload from "../components/photoupload";
 import ProfileDetails from "../components/profiledetails";
 import "../App.css";
 
 class ProfilePage extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div>
