@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
     let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        message: "User does not exist in database"
+        message: "User does not exist in database",
       });
     }
 
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       return res.status(400).json({
-        message: "Invalid Password"
+        message: "Invalid Password",
       });
     }
 
@@ -37,12 +37,13 @@ router.post("/", async (req, res) => {
     //We will use the user ID in the database because it is unique and identifies the user.
     const payload = {
       user: {
-        id: user.id
-      }
+        id: user.id,
+        username: user.username,
+      },
     };
     //We will send the JWT back as a response to the login request in the form of "token" : "value".
     //We also set the expiry time to 1 hour.
-    jwt.sign(payload, "secret", { expiresIn: 3600 }, (err, token) => {
+    jwt.sign(payload, "secret", { expiresIn: 10000 }, (err, token) => {
       if (err) {
         throw err;
       }

@@ -4,7 +4,7 @@
   "description": "Develop a web application to display silly pictures (memes) and allow interaction between users (Memestagram).",
   "main": "index.js",
   "scripts": {
-    "test": "node ./server/node_modules/mocha/bin/mocha ./tests"
+    "test": "node ./server/node_modules/mocha/bin/mocha --exit ./tests"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/gregtuc/Soen-341/issues"
   },
-  "homepage": "https://github.com/gregtuc/Soen-341#readme"
+  "homepage": "https://github.com/gregtuc/Soen-341#readme",
+  "dependencies": {
+    "gridfs-stream": "^1.1.1",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.2",
+    "multer-gridfs-storage": "^4.0.2"
+  }
 }

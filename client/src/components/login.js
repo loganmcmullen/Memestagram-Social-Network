@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
-import "../App.css";
+import auth from "../authentication/auth-login";
+import "../styling/loginstyle.css";
 
 class RenderLoginForm extends Component {
   constructor(props) {
@@ -13,7 +15,8 @@ class RenderLoginForm extends Component {
     //By default the state contains an empty username and empty password.
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      redirect: false
     };
   }
   //When this function is called, change the username to the new value.
@@ -34,7 +37,11 @@ class RenderLoginForm extends Component {
     axios
       .post("http://localhost:8000/api/login", user)
       .then(res => {
-        console.log(res.data);
+        if (res.status === 200) {
+          auth.authenticate(res.data.token, () => {
+            this.setState({ redirect: true });
+          });
+        }
       })
       .catch(error => {
         console.log(error);
@@ -43,37 +50,54 @@ class RenderLoginForm extends Component {
     this.setState({ email: "", password: "" });
   }
   render() {
+    const { redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/" />;
+    }
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1>Log in</h1>
-          <br />
-          <Form onSubmit={this.onSubmit}>
-            <Form.Group controlId="Email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                name="email"
-                value={this.state.email}
-                onChange={this.onChangeEmail}
-              />
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={this.state.password}
-                onChange={this.onChangePassword}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </header>
+      <div className="Login">
+        <div className="Login-header">
+          <Card
+            border="dark"
+            className="rounded mb-20"
+            bg="light"
+            style={{ width: "18rem", padding: "40px" }}
+            text="dark"
+          >
+            <h1>Log in to your account</h1>
+            <Card.Body>
+              <Form onSubmit={this.onSubmit}>
+                <Form.Group controlId="Email">
+                  <Card.Text>
+                    <Form.Label>Email</Form.Label>
+                  </Card.Text>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.onChangeEmail}
+                  />
+                </Form.Group>
+                <Form.Group controlId="password">
+                  <Card.Text>
+                    <Form.Label>Password</Form.Label>
+                  </Card.Text>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.onChangePassword}
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Login
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </div>
       </div>
     );
   }
